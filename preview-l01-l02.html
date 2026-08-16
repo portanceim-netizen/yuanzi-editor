@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L01 & L02 精确预览</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0ebe3;font-family:'PingFang SC','Microsoft YaHei',sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px;gap:24px}
+h2{font-size:16px;color:#5c3d2e;letter-spacing:2px;text-align:center}
+.phone{width:375px;height:740px;position:relative;background:linear-gradient(170deg,#fef9f0,#fdf5ea,#fef9f0);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.1);overflow:hidden;flex-shrink:0}
+.r{position:absolute;box-sizing:border-box}
+.r-photo{background:rgba(255,255,255,0.7);border:2px dashed rgba(212,104,124,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:20px;color:#d4687c}
+.r-photo::after{content:'添加照片';font-size:9px;color:#c4b5a5}
+.r-title{display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#5c3d2e;letter-spacing:4px}
+.r-date{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.r-date .main{font-size:14px;font-weight:700;color:#5c3d2e}
+.r-date .sub{font-size:10px;color:#8c7b6b;display:flex;gap:8px;margin-bottom:0}
+.r-card{background:rgba(255,255,255,0.7);border:2px solid rgba(201,169,110,0.2);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.r-card .label{font-size:12px;font-weight:700;color:#5c3d2e;padding-left:7px;border-left:3px solid #d4687c}
+.r-card .label.gold{border-left-color:#c9a96e;color:#8a6d3b}
+.r-card .hint{font-size:10px;color:#c4b5a5;background:rgba(255,255,255,0.7);border:1.5px dashed rgba(212,104,124,0.15);border-radius:7px;padding:6px 8px;min-height:20px;flex:1}
+.sk{position:absolute;z-index:5;font-size:22px;opacity:0.7;pointer-events:none;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<h2>L01 · 标题横幅</h2>
+<div class="phone" id="l01"></div>
+<h2>L02 · 侧边栏</h2>
+<div class="phone" id="l02"></div>
+<script>
+const W=375, H=740;
+const emojis=['⭐','🌸','💫','🦋','🌿','✨','🎀','💖','🍃','🌟','🌙','☁️'];
+
+function render(id, regions, stickers) {
+  const el = document.getElementById(id);
+  regions.forEach((r,i) => {
+    const div = document.createElement('div');
+    div.className = 'r';
+    div.style.left = (r.x*W)+'px';
+    div.style.top = (r.y*H)+'px';
+    div.style.width = (r.w*W)+'px';
+    div.style.height = (r.h*H)+'px';
+    if (r.rotation) div.style.transform = `rotate(${r.rotation}deg)`;
+    if (r.vertical) {
+      div.style.writingMode = 'vertical-rl';
+      div.style.textOrientation = 'upright';
+    }
+
+    switch(r.type) {
+      case 'title':
+        div.className += ' r-title';
+        div.textContent = '海 边 日 记';
+        if (r.vertical) { div.style.fontSize = '18px'; div.style.letterSpacing = '6px'; }
+        break;
+      case 'date':
+        div.className += ' r-date';
+        div.innerHTML = '<div class="main">2026年8月16日</div><div class="sub"><span>😊 开心</span><span>☀️ 晴</span></div>';
+        break;
+      case 'photo':
+        div.className += ' r-photo';
+        div.textContent = '📷';
+        break;
+      case 'diary':
+        div.className += ' r-card';
+        div.innerHTML = '<div class="label">📝 发生了什么事...</div><div class="hint">点击输入...</div>';
+        break;
+      case 'done':
+        div.className += ' r-card';
+        div.innerHTML = '<div class="label">✅ 今日完成</div><div class="hint">点击输入...</div>';
+        break;
+      case 'thanks':
+        div.className += ' r-card';
+        div.innerHTML = '<div class="label">🙏 感恩小事</div><div class="hint">点击输入...</div>';
+        break;
+      case 'gain':
+        div.className += ' r-card';
+        div.innerHTML = '<div class="label gold">🌟 收获</div><div class="hint">点击输入...</div>';
+        break;
+      case 'improve':
+        div.className += ' r-card';
+        div.innerHTML = '<div class="label gold">💡 改进</div><div class="hint">点击输入...</div>';
+        break;
+      case 'expect':
+        div.className += ' r-card';
+        div.innerHTML = '<div class="label gold">✨ 期待</div><div class="hint">点击输入...</div>';
+        break;
+    }
+    el.appendChild(div);
+  });
+  stickers.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.className = 'sk';
+    div.style.left = (s.x*W - 12)+'px';
+    div.style.top = (s.y*H - 12)+'px';
+    div.style.width = '24px';
+    div.style.height = '24px';
+    div.textContent = emojis[i % emojis.length];
+    el.appendChild(div);
+  });
+}
+
+// L01 data
+render('l01', [
+  {type:'title', x:0.053, y:0.030, w:0.609, h:0.085},
+  {type:'date', x:0.058, y:0.115, w:0.360, h:0.060},
+  {type:'photo', x:0.657, y:0.143, w:0.253, h:0.220, rotation:6.11},
+  {type:'diary', x:0.047, y:0.192, w:0.643, h:0.171},
+  {type:'done', x:0.053, y:0.558, w:0.453, h:0.140},
+  {type:'thanks', x:0.053, y:0.708, w:0.453, h:0.140},
+  {type:'gain', x:0.533, y:0.380, w:0.413, h:0.120},
+  {type:'improve', x:0.533, y:0.508, w:0.413, h:0.120},
+  {type:'expect', x:0.536, y:0.638, w:0.413, h:0.120},
+  {type:'photo', x:0.542, y:0.778, w:0.402, h:0.114}
+], [
+  {x:0.265, y:0.454},
+  {x:0.751, y:0.077},
+  {x:0.506, y:0.943}
+]);
+
+// L02 data
+render('l02', [
+  {type:'photo', x:0.050, y:0.041, w:0.320, h:0.180},
+  {type:'title', x:0.568, y:0.404, w:0.221, h:0.242, vertical:true},
+  {type:'photo', x:0.050, y:0.696, w:0.320, h:0.180},
+  {type:'date', x:0.424, y:0.041, w:0.508, h:0.090},
+  {type:'diary', x:0.043, y:0.390, w:0.490, h:0.270},
+  {type:'done', x:0.425, y:0.152, w:0.533, h:0.100},
+  {type:'thanks', x:0.425, y:0.262, w:0.533, h:0.100},
+  {type:'gain', x:0.413, y:0.670, w:0.533, h:0.090},
+  {type:'improve', x:0.413, y:0.773, w:0.533, h:0.090},
+  {type:'expect', x:0.413, y:0.876, w:0.533, h:0.090}
+], [
+  {x:0.213, y:0.318},
+  {x:0.466, y:0.741},
+  {x:0.210, y:0.930},
+  {x:0.850, y:0.525}
+]);
+</script>
+</body>
+</html>
