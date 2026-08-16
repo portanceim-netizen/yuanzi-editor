@@ -79,16 +79,16 @@
   .bottombar .act.danger { border-color: var(--danger); color: var(--danger); }
 
   /* ── 画布区域 ── */
-  .canvas-area {
-    position: fixed; top: 44px; bottom: 90px; left: 0; right: 0;
-    overflow: auto; display: flex; align-items: flex-start; justify-content: center;
-    padding: 8px; -webkit-overflow-scrolling: touch;
-  }
-  .canvas-wrap {
-    position: relative; flex-shrink: 0;
-    transform-origin: top left;
-    transition: transform 0.15s;
-  }
+	  .canvas-area {
+	    position: fixed; top: 44px; bottom: 90px; left: 0; right: 0;
+	    overflow: auto; display: flex; align-items: center; justify-content: center;
+	    padding: 4px; -webkit-overflow-scrolling: touch;
+	  }
+	  .canvas-wrap {
+	    position: relative; flex-shrink: 0;
+	    transform-origin: center center;
+	    transition: transform 0.15s;
+	  }
   .canvas {
     position: relative; width: 375px; aspect-ratio: 375/740;
     background: var(--paper);
@@ -953,12 +953,12 @@ function setZoom(z) {
 function zoomIn() { setZoom(zoom + 0.15); }
 function zoomOut() { setZoom(zoom - 0.15); }
 function zoomFit() {
-  const areaW = canvasArea.clientWidth - 16;
-  const areaH = canvasArea.clientHeight - 16;
-  const z = Math.min(areaW/375, areaH/740);
-  setZoom(z);
-  canvasArea.scrollTop = 0;
-}
+	  const areaW = canvasArea.clientWidth - 8;
+	  const areaH = canvasArea.clientHeight - 8;
+	  const z = Math.min(areaW/375, areaH/740);
+	  setZoom(z);
+	  canvasArea.scrollTop = 0;
+	}
 
 function toggleGrid() {
   showGrid = !showGrid;
