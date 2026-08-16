@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L01 标题横幅 · 预览</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0ebe3;font-family:'PingFang SC','Microsoft YaHei',sans-serif;display:flex;flex-direction:column;align-items:center;padding:24px;min-height:100vh}
+h1{font-size:20px;color:#5c3d2e;margin-bottom:4px;letter-spacing:2px}
+.sub{font-size:12px;color:#b8a590;margin-bottom:20px}
+.phone{width:375px;height:740px;position:relative;background:linear-gradient(170deg,#fef9f0,#fdf5ea,#fef9f0);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.1);overflow:hidden}
+.r{position:absolute;box-sizing:border-box}
+.r-title{font-size:26px;font-weight:900;color:#5c3d2e;letter-spacing:4px;display:flex;align-items:center;justify-content:center}
+.r-date{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.r-date .main{font-size:14px;font-weight:700;color:#5c3d2e}
+.r-date .sub{font-size:10px;color:#8c7b6b;display:flex;gap:8px;margin-bottom:0}
+.r-photo{background:rgba(255,255,255,0.7);border:2px dashed rgba(212,104,124,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:20px;color:#d4687c}
+.r-photo::after{content:'添加照片';font-size:9px;color:#c4b5a5}
+.r-diary{background:rgba(255,255,255,0.7);border:2px solid rgba(201,169,110,0.2);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.r-diary::before{content:'📝 发生了什么事...';font-size:12px;font-weight:700;color:#5c3d2e;padding-left:7px;border-left:3px solid #d4687c}
+.r-diary::after{content:'点击输入...';font-size:11px;color:#c4b5a5;background:rgba(255,255,255,0.7);border:1.5px dashed rgba(212,104,124,0.15);border-radius:7px;padding:6px 8px;min-height:30px}
+.r-done{background:rgba(255,255,255,0.7);border:2px solid rgba(201,169,110,0.2);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.r-done::before{content:'✅ 今日完成';font-size:12px;font-weight:700;color:#5c3d2e;padding-left:7px;border-left:3px solid #d4687c}
+.r-thanks{background:rgba(255,255,255,0.7);border:2px solid rgba(201,169,110,0.2);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.r-thanks::before{content:'🙏 感恩小事';font-size:12px;font-weight:700;color:#5c3d2e;padding-left:7px;border-left:3px solid #d4687c}
+.r-gain{background:rgba(255,255,255,0.55);border:2px solid rgba(201,169,110,0.15);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.r-gain::before{content:'🌟 收获';font-size:11px;font-weight:700;color:#c9a96e;padding-left:6px;border-left:3px solid #c9a96e}
+.r-improve{background:rgba(255,255,255,0.55);border:2px solid rgba(201,169,110,0.15);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.r-improve::before{content:'💡 改进';font-size:11px;font-weight:700;color:#c9a96e;padding-left:6px;border-left:3px solid #c9a96e}
+.r-expect{background:rgba(255,255,255,0.55);border:2px solid rgba(201,169,110,0.15);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.r-expect::before{content:'✨ 期待';font-size:11px;font-weight:700;color:#c9a96e;padding-left:6px;border-left:3px solid #c9a96e}
+.sticker{position:absolute;z-index:5;font-size:24px;opacity:0.7;pointer-events:none}
+</style>
+</head>
+<body>
+<h1>L01 · 标题横幅</h1>
+<p class="sub">沅子的魔法屋 · 手账模板预览</p>
+<div class="phone">
+  <!-- title -->
+  <div class="r r-title" style="left:19.9px;top:22.2px;width:228.4px;height:62.9px">海 边 日 记</div>
+  <!-- date -->
+  <div class="r r-date" style="left:21.8px;top:85.1px;width:135px;height:44.4px">
+    <div class="main">2026年8月16日</div>
+    <div class="sub"><span>😊 开心</span><span>☀️ 晴</span></div>
+  </div>
+  <!-- photo 1 (rotated) -->
+  <div class="r r-photo" style="left:246.4px;top:105.8px;width:94.9px;height:162.8px;transform:rotate(6.11deg)">📷</div>
+  <!-- diary -->
+  <div class="r r-diary" style="left:17.6px;top:142.1px;width:241.1px;height:126.5px"></div>
+  <!-- done -->
+  <div class="r r-done" style="left:19.9px;top:412.9px;width:169.9px;height:103.6px"></div>
+  <!-- thanks -->
+  <div class="r r-thanks" style="left:19.9px;top:523.9px;width:169.9px;height:103.6px"></div>
+  <!-- gain -->
+  <div class="r r-gain" style="left:199.9px;top:281.2px;width:154.9px;height:88.8px"></div>
+  <!-- improve -->
+  <div class="r r-improve" style="left:199.9px;top:375.9px;width:154.9px;height:88.8px"></div>
+  <!-- expect -->
+  <div class="r r-expect" style="left:201px;top:472.1px;width:154.9px;height:88.8px"></div>
+  <!-- photo 2 -->
+  <div class="r r-photo" style="left:203.3px;top:575.7px;width:150.8px;height:84.4px">📷</div>
+  <!-- stickers -->
+  <div class="sticker" style="left:195px;top:17.8px">⭐</div>
+  <div class="sticker" style="left:19.9px;top:154.7px">🌸</div>
+  <div class="sticker" style="left:330px;top:629px">💫</div>
+  <div class="sticker" style="left:120px;top:688.2px">🦋</div>
+</div>
+</body>
+</html>
