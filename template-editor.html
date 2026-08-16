@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>模板编辑器 v3</title>
+<title>模板编辑器 v4</title>
 <style>
   :root {
     --bg: #FDF8F0;
@@ -239,6 +239,36 @@
 	    border-radius: 50%;
 	    box-shadow: 0 0 0 4px rgba(200,168,130,0.1);
 	    opacity: 1;
+	  }
+
+	  /* ── 竖排文字 ── */
+	  .region.vertical-text {
+	    writing-mode: vertical-rl;
+	    text-orientation: upright;
+	  }
+	  .region-title.vertical-text {
+	    writing-mode: vertical-rl;
+	    text-orientation: upright;
+	    letter-spacing: 0.2em;
+	  }
+	  .region-text.vertical-text .text-header {
+	    writing-mode: vertical-rl;
+	    text-orientation: upright;
+	    padding: 4px 2px 0 2px;
+	  }
+	  .region-text.vertical-text .text-body {
+	    writing-mode: vertical-rl;
+	    text-orientation: upright;
+	    padding: 2px 4px 4px 2px;
+	  }
+	  .region-banner.vertical-text {
+	    writing-mode: vertical-rl;
+	    text-orientation: upright;
+	    letter-spacing: 0.15em;
+	  }
+	  .region-date.vertical-text {
+	    writing-mode: vertical-rl;
+	    text-orientation: upright;
 	  }
 
 	  /* ── 总结卡片 ── */
@@ -634,8 +664,8 @@ const bottombar = document.getElementById('bottombar');
 	function updateCanvasPadding() {
 	  const topH = document.querySelector('.topbar').offsetHeight;
 	  const botH = document.querySelector('.bottombar').offsetHeight;
-	  canvasArea.style.paddingTop = (topH + 4) + 'px';
-	  canvasArea.style.paddingBottom = (botH + 4) + 'px';
+	  canvasArea.style.top = topH + 'px';
+	  canvasArea.style.bottom = botH + 'px';
 	}
 
 	function init() {
@@ -663,10 +693,19 @@ const bottombar = document.getElementById('bottombar');
   });
 
   // 底部操作按钮
-  const sep = document.createElement('span');
-  sep.style.cssText = 'flex-basis:100%;height:0;';
-  bottombar.appendChild(sep);
-  ['重置','导出'].forEach((label,i) => {
+	  const sep = document.createElement('span');
+	  sep.style.cssText = 'flex-basis:100%;height:0;';
+	  bottombar.appendChild(sep);
+
+	  // 竖排文字切换按钮
+	  const vertBtn = document.createElement('div');
+	  vertBtn.className = 'act';
+	  vertBtn.id = 'vertBtn';
+	  vertBtn.textContent = '⇅ 竖排';
+	  vertBtn.onclick = toggleVertical;
+	  bottombar.appendChild(vertBtn);
+
+	  ['重置','导出'].forEach((label,i) => {
     const btn = document.createElement('div');
     btn.className = 'act' + (i===1?' primary':'');
     btn.textContent = label;
@@ -716,8 +755,9 @@ function getRegionClass(r) {
 	  currentRegions.forEach((r, i) => {
 	    const el = document.createElement('div');
 	    el.className = 'region region-' + getRegionClass(r);
-	    if (i === selectedIdx) el.classList.add('selected');
-	    if (GOLD_TYPES.includes(r.type)) el.classList.add('gold');
+		    if (i === selectedIdx) el.classList.add('selected');
+		    if (GOLD_TYPES.includes(r.type)) el.classList.add('gold');
+		    if (r.vertical) el.classList.add('vertical-text');
 	    el.style.left = (r.x*100)+'%';
 	    el.style.top = (r.y*100)+'%';
 	    el.style.width = (r.w*100)+'%';
@@ -785,13 +825,26 @@ function getRegionClass(r) {
 	}
 
 function updateSelInfo() {
-  if (selectedIdx>=0 && selectedIdx<currentRegions.length) {
-    const r = currentRegions[selectedIdx];
-    selInfo.textContent = `选中: ${LABELS[r.type]} x=${r.x.toFixed(4)} y=${r.y.toFixed(4)} w=${r.w.toFixed(4)} h=${r.h.toFixed(4)}${r.rotation?' r='+r.rotation+'°':''}`;
-  } else {
-    selInfo.textContent = '点击区域选中';
-  }
-}
+	  if (selectedIdx>=0 && selectedIdx<currentRegions.length) {
+	    const r = currentRegions[selectedIdx];
+	    const vertLabel = r.vertical ? ' [竖排]' : '';
+	    selInfo.textContent = `选中: ${LABELS[r.type]}${vertLabel} x=${r.x.toFixed(4)} y=${r.y.toFixed(4)} w=${r.w.toFixed(4)} h=${r.h.toFixed(4)}${r.rotation?' r='+r.rotation+'°':''}`;
+	    document.getElementById('vertBtn').style.display = '';
+	    document.getElementById('vertBtn').classList.toggle('primary', !!r.vertical);
+	  } else {
+	    selInfo.textContent = '点击区域选中';
+	    document.getElementById('vertBtn').style.display = 'none';
+	  }
+	}
+
+	function toggleVertical() {
+	  if (selectedIdx < 0) return;
+	  const r = currentRegions[selectedIdx];
+	  r.vertical = !r.vertical;
+	  render();
+	  updateSelInfo();
+	  showToast(r.vertical ? '已切换为竖排' : '已切换为横排');
+	}
 
 // ── 交互 ──
 function onPointerDown(e, idx, mode) {
@@ -967,15 +1020,12 @@ function setZoom(z) {
 function zoomIn() { setZoom(zoom + 0.15); }
 function zoomOut() { setZoom(zoom - 0.15); }
 function zoomFit() {
-	  const padTop = parseFloat(canvasArea.style.paddingTop) || 4;
-	  const padBot = parseFloat(canvasArea.style.paddingBottom) || 4;
 	  const areaW = canvasArea.clientWidth - 8;
-	  const areaH = canvasArea.clientHeight - padTop - padBot - 8;
+	  const areaH = canvasArea.clientHeight - 8;
 	  const z = Math.min(areaW/375, areaH/740);
 	  setZoom(z);
-	  // 居中滚动位置
 	  canvasArea.scrollLeft = Math.max(0, (375 - canvasArea.clientWidth) / 2);
-	  canvasArea.scrollTop = Math.max(0, (740 * z - canvasArea.clientHeight + padTop + padBot) / 2);
+	  canvasArea.scrollTop = Math.max(0, (740 * z - canvasArea.clientHeight) / 2);
 	}
 
 function toggleGrid() {
@@ -989,11 +1039,12 @@ function exportJSON() {
     id: TEMPLATES[currentIdx].id,
     name: TEMPLATES[currentIdx].name,
     regions: currentRegions.map(r => {
-      const obj = {type:r.type, x:r.x, y:r.y, w:r.w, h:r.h};
-      if (r.style) obj.style = r.style;
-      if (r.rotation && r.rotation!==0) obj.rotation = r.rotation;
-      return obj;
-    })
+	      const obj = {type:r.type, x:r.x, y:r.y, w:r.w, h:r.h};
+	      if (r.style) obj.style = r.style;
+	      if (r.rotation && r.rotation!==0) obj.rotation = r.rotation;
+	      if (r.vertical) obj.vertical = true;
+	      return obj;
+	    })
   };
 
   const dart = toDart(out);
@@ -1022,7 +1073,8 @@ function toDart(out) {
     parts.push('h: '+r.h.toFixed(4));
     if (r.style) parts.push("style: '"+r.style+"'");
     if (r.rotation && r.rotation!==0) parts.push('rotation: '+r.rotation);
-    lines.push('    LayoutRegion('+parts.join(', ')+'),');
+	    if (r.vertical) parts.push('vertical: true');
+	    lines.push('    LayoutRegion('+parts.join(', ')+'),');
   });
   lines.push('  ],');
   lines.push('),');
