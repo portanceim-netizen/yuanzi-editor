@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>模板编辑器 v5</title>
+<title>模板编辑器 v6</title>
 <style>
   :root {
     --bg: #FDF8F0;
@@ -118,7 +118,7 @@
 	  .region.selected {
 	    border-color: var(--text); border-width: 2.5px;
 	    box-shadow: 0 0 0 5px rgba(74,63,53,0.12);
-	    z-index: 10 !important;
+	    z-index: 10 !important; overflow: visible !important;
 	  }
 
 	  /* ── 照片卡片 ── */
@@ -662,10 +662,14 @@ const bottombar = document.getElementById('bottombar');
 
 // ── 初始化 ──
 	function updateCanvasPadding() {
-	  const topH = document.querySelector('.topbar').offsetHeight;
-	  const botH = document.querySelector('.bottombar').offsetHeight;
-	  canvasArea.style.top = topH + 'px';
-	  canvasArea.style.bottom = botH + 'px';
+	  requestAnimationFrame(() => {
+	    const topH = document.querySelector('.topbar').offsetHeight;
+	    const botH = document.querySelector('.bottombar').offsetHeight;
+	    if (topH && botH) {
+	      canvasArea.style.top = topH + 'px';
+	      canvasArea.style.bottom = botH + 'px';
+	    }
+	  });
 	}
 
 	function init() {
@@ -719,13 +723,14 @@ const bottombar = document.getElementById('bottombar');
 
 function switchTemplate(idx) {
   currentIdx = idx;
-  currentRegions = JSON.parse(JSON.stringify(TEMPLATES[idx].regions));
-  selectedIdx = -1;
-  closeModal();
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  render();
-  updateSelInfo();
-}
+	  currentRegions = JSON.parse(JSON.stringify(TEMPLATES[idx].regions));
+	  selectedIdx = -1;
+	  closeModal();
+	  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+	  render();
+	  updateSelInfo();
+	  updateCanvasPadding();
+	}
 
 function resetTemplate() {
   currentRegions = JSON.parse(JSON.stringify(TEMPLATES[currentIdx].regions));
@@ -1013,10 +1018,11 @@ function addRegion(type) {
 
 // ── 缩放 ──
 function setZoom(z) {
-  zoom = Math.max(0.3, Math.min(3, z));
-  canvasWrap.style.transform = `scale(${zoom})`;
-  zoomLabel.textContent = Math.round(zoom*100)+'%';
-}
+	  zoom = Math.max(0.3, Math.min(3, z));
+	  canvasWrap.style.transform = `scale(${zoom})`;
+	  zoomLabel.textContent = Math.round(zoom*100)+'%';
+	  updateCanvasPadding();
+	}
 
 function zoomIn() { setZoom(zoom + 0.15); }
 function zoomOut() { setZoom(zoom - 0.15); }
