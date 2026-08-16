@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>模板编辑器 v2</title>
+<title>模板编辑器 v3</title>
 <style>
   :root {
     --bg: #FDF8F0;
@@ -83,7 +83,7 @@
 
   /* ── 画布区域 ── */
 	  .canvas-area {
-	    position: fixed; top: 44px; bottom: 90px; left: 0; right: 0;
+	    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
 	    overflow: auto; display: flex; align-items: center; justify-content: center;
 	    padding: 4px; -webkit-overflow-scrolling: touch;
 	  }
@@ -631,9 +631,20 @@ const modalTitle = document.getElementById('modalTitle');
 const bottombar = document.getElementById('bottombar');
 
 // ── 初始化 ──
-function init() {
-  // 顶部 tabs
-  TEMPLATES.forEach((t,i) => {
+	function updateCanvasPadding() {
+	  const topH = document.querySelector('.topbar').offsetHeight;
+	  const botH = document.querySelector('.bottombar').offsetHeight;
+	  canvasArea.style.paddingTop = (topH + 4) + 'px';
+	  canvasArea.style.paddingBottom = (botH + 4) + 'px';
+	}
+
+	function init() {
+	  // 动态设置画布区域的内边距，避开顶部和底部工具栏
+	  updateCanvasPadding();
+	  window.addEventListener('resize', updateCanvasPadding);
+
+	  // 顶部 tabs
+	  TEMPLATES.forEach((t,i) => {
     const btn = document.createElement('div');
     btn.className = 'tab' + (i===0?' active':'');
     btn.textContent = t.id.toUpperCase();
@@ -956,13 +967,15 @@ function setZoom(z) {
 function zoomIn() { setZoom(zoom + 0.15); }
 function zoomOut() { setZoom(zoom - 0.15); }
 function zoomFit() {
+	  const padTop = parseFloat(canvasArea.style.paddingTop) || 4;
+	  const padBot = parseFloat(canvasArea.style.paddingBottom) || 4;
 	  const areaW = canvasArea.clientWidth - 8;
-	  const areaH = canvasArea.clientHeight - 8;
+	  const areaH = canvasArea.clientHeight - padTop - padBot - 8;
 	  const z = Math.min(areaW/375, areaH/740);
 	  setZoom(z);
 	  // 居中滚动位置
 	  canvasArea.scrollLeft = Math.max(0, (375 - canvasArea.clientWidth) / 2);
-	  canvasArea.scrollTop = Math.max(0, (740 * z - canvasArea.clientHeight) / 2);
+	  canvasArea.scrollTop = Math.max(0, (740 * z - canvasArea.clientHeight + padTop + padBot) / 2);
 	}
 
 function toggleGrid() {
