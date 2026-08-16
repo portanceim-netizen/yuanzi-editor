@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>模板编辑器 v6</title>
+<title>模板编辑器 v7</title>
 <style>
   :root {
     --bg: #FDF8F0;
@@ -93,12 +93,12 @@
 	    transition: transform 0.15s;
 	  }
   .canvas {
-    position: relative; width: 375px; aspect-ratio: 375/740;
-    background: var(--paper);
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-    overflow: hidden;
-  }
+	    position: relative; width: 375px; aspect-ratio: 375/740;
+	    background: var(--paper);
+	    border-radius: 12px;
+	    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+	    overflow: visible;
+	  }
   .canvas.grid {
     background-image:
       linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
@@ -329,10 +329,10 @@
 	  .region .info-badge {
 	    position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
 	    background: var(--text); color: #fff; font-size: 9px; padding: 1px 6px;
-	    border-radius: 8px; white-space: nowrap; display: none;
+	    border-radius: 8px; white-space: nowrap; display: none !important;
 	    pointer-events: none;
 	  }
-	  .region.selected .info-badge { display:block; }
+	  .region.selected .info-badge { display:none !important; }
 
   /* ── 吸附线 ── */
   .snap-line {
