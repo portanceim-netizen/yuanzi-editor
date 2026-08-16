@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>模板编辑器 v4</title>
+<title>模板编辑器 v5</title>
 <style>
   :root {
     --bg: #FDF8F0;
@@ -829,11 +829,12 @@ function updateSelInfo() {
 	    const r = currentRegions[selectedIdx];
 	    const vertLabel = r.vertical ? ' [竖排]' : '';
 	    selInfo.textContent = `选中: ${LABELS[r.type]}${vertLabel} x=${r.x.toFixed(4)} y=${r.y.toFixed(4)} w=${r.w.toFixed(4)} h=${r.h.toFixed(4)}${r.rotation?' r='+r.rotation+'°':''}`;
-	    document.getElementById('vertBtn').style.display = '';
+	    document.getElementById('vertBtn').style.opacity = '1';
 	    document.getElementById('vertBtn').classList.toggle('primary', !!r.vertical);
 	  } else {
 	    selInfo.textContent = '点击区域选中';
-	    document.getElementById('vertBtn').style.display = 'none';
+	    document.getElementById('vertBtn').style.opacity = '0.4';
+	    document.getElementById('vertBtn').classList.remove('primary');
 	  }
 	}
 
