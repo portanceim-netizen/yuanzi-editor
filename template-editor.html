@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>模板编辑器</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>模板编辑器 v11</title>
 <style>
   :root {
     --bg: #FDF8F0;
@@ -80,13 +83,13 @@
 
   /* ── 画布区域 ── */
   .canvas-area {
-    position: fixed; top: 44px; bottom: 90px; left: 0; right: 0;
-    overflow: auto; display: flex; align-items: flex-start; justify-content: center;
-    padding: 8px; -webkit-overflow-scrolling: touch;
+    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+    overflow: auto; display: flex; align-items: center; justify-content: center;
+    padding: 4px; -webkit-overflow-scrolling: touch;
   }
   .canvas-wrap {
     position: relative; flex-shrink: 0;
-    transform-origin: top left;
+    transform-origin: center center;
     transition: transform 0.15s;
   }
   .canvas {
@@ -94,7 +97,7 @@
     background: var(--paper);
     border-radius: 12px;
     box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-    overflow: hidden;
+    overflow: visible;
   }
   .canvas.grid {
     background-image:
@@ -104,202 +107,231 @@
   }
 
   .region {
-	    position: absolute; border-radius: 6px;
-	    cursor: grab; overflow: hidden;
-	    min-width: 28px; min-height: 28px;
-	    touch-action: none;
-	    border: 2px solid rgba(0,0,0,0.08);
-	    background: rgba(255,255,255,0.85);
-	  }
-	  .region:active { cursor:grabbing; }
-	  .region.selected {
-	    border-color: var(--text); border-width: 2.5px;
-	    box-shadow: 0 0 0 5px rgba(74,63,53,0.12);
-	    z-index: 10 !important;
-	  }
+    position: absolute; border-radius: 6px;
+    cursor: grab; overflow: hidden;
+    min-width: 28px; min-height: 28px;
+    touch-action: none;
+    border: 2px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.85);
+  }
+  .region:active { cursor:grabbing; }
+  .region.selected {
+    border-color: var(--text); border-width: 2.5px;
+    box-shadow: 0 0 0 5px rgba(74,63,53,0.12);
+    z-index: 10 !important; overflow: visible !important;
+  }
 
-	  /* ── 照片卡片 ── */
-	  .region.region-photo {
-	    background: #F5F0E8;
-	    border: 2px dashed #D4C8B0;
-	    display: flex; flex-direction: column;
-	    align-items: center; justify-content: center;
-	    gap: 2px;
-	  }
-	  .region-photo .photo-icon {
-	    font-size: 16px; opacity: 0.5; line-height: 1;
-	  }
-	  .region-photo .photo-hint {
-	    font-size: 8px; color: #B0A08A; font-weight: 500;
-	    pointer-events: none;
-	  }
+  /* ── 照片卡片 ── */
+  .region.region-photo {
+    background: #F5F0E8;
+    border: 2px dashed #D4C8B0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2px;
+  }
+  .region-photo .photo-icon {
+    font-size: 16px; opacity: 0.5; line-height: 1;
+  }
+  .region-photo .photo-hint {
+    font-size: 8px; color: #B0A08A; font-weight: 500;
+    pointer-events: none;
+  }
 
-	  /* ── 文字卡片 ── */
-	  .region.region-text {
-	    background: #FFF;
-	    border: 1.5px solid #E8DDD0;
-	    border-radius: 8px;
-	    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-	    display: flex; flex-direction: column;
-	    padding: 0; overflow: hidden;
-	  }
-	  .region-text .text-header {
-	    display: flex; align-items: center; gap: 3px;
-	    padding: 3px 6px 0 6px;
-	    font-size: 8px; font-weight: 700;
-	    pointer-events: none;
-	    flex-shrink: 0;
-	  }
-	  .region-text .text-body {
-	    flex: 1; padding: 1px 6px 4px 6px;
-	    font-size: 7px; color: #B0A0A0;
-	    pointer-events: none;
-	    overflow: hidden; text-overflow: ellipsis;
-	    display: flex; align-items: flex-start;
-	  }
-	  .region-text.gold .text-header { color: #C9A96E; }
-	  .region-text.gold { border-color: #E8D5B0; }
+  /* ── 文字卡片 ── */
+  .region.region-text {
+    background: #FFF;
+    border: 1.5px solid #E8DDD0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex; flex-direction: column;
+    padding: 0; overflow: hidden;
+  }
+  .region-text .text-header {
+    display: flex; align-items: center; gap: 3px;
+    padding: 3px 6px 0 6px;
+    font-size: 8px; font-weight: 700;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  .region-text .text-body {
+    flex: 1; padding: 1px 6px 4px 6px;
+    font-size: 7px; color: #B0A0A0;
+    pointer-events: none;
+    overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: flex-start;
+  }
+  .region-text.gold .text-header { color: #C9A96E; }
+  .region-text.gold { border-color: #E8D5B0; }
 
-	  /* ── 浮动装饰（无底框） ── */
-	  .region.region-floating {
-	    background: transparent;
-	    border: none;
-	    border-radius: 0;
-	    overflow: visible;
-	    min-width: 20px; min-height: 14px;
-	  }
-	  .region-floating.selected {
-	    border: 1.5px dashed rgba(74,63,53,0.35);
-	    border-radius: 4px;
-	    box-shadow: 0 0 0 4px rgba(74,63,53,0.08);
-	  }
+  /* ── 浮动装饰（无底框） ── */
+  .region.region-floating {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    min-width: 20px; min-height: 14px;
+  }
+  .region-floating.selected {
+    border: 1.5px dashed rgba(74,63,53,0.35);
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(74,63,53,0.08);
+  }
 
-	  /* ── 标题（浮动） ── */
-	  .region.region-title {
-	    background: transparent; border: none; border-radius: 0;
-	    overflow: visible; min-width: 20px; min-height: 14px;
-	    display: flex; align-items: center; justify-content: center;
-	    font-size: 13px; font-weight: 800; color: #D4786A;
-	    letter-spacing: 0.15em;
-	  }
-	  .region-title.selected {
-	    border: 1.5px dashed rgba(212,120,106,0.45);
-	    border-radius: 4px;
-	    box-shadow: 0 0 0 4px rgba(212,120,106,0.08);
-	  }
+  /* ── 标题（浮动） ── */
+  .region.region-title {
+    background: transparent; border: none; border-radius: 0;
+    overflow: visible; min-width: 20px; min-height: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #D4786A;
+    letter-spacing: 0.15em;
+  }
+  .region-title.selected {
+    border: 1.5px dashed rgba(212,120,106,0.45);
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(212,120,106,0.08);
+  }
 
-	  /* ── 横幅（浮动） ── */
-	  .region.region-banner {
-	    background: transparent; border: none; border-radius: 0;
-	    overflow: visible; min-width: 20px; min-height: 14px;
-	    display: flex; align-items: center; justify-content: center;
-	    font-size: 13px; font-weight: 700; color: #D4786A;
-	    letter-spacing: 0.08em;
-	  }
-	  .region-banner.selected {
-	    border: 1.5px dashed rgba(212,120,106,0.45);
-	    border-radius: 4px;
-	    box-shadow: 0 0 0 4px rgba(212,120,106,0.08);
-	  }
+  /* ── 横幅（浮动） ── */
+  .region.region-banner {
+    background: transparent; border: none; border-radius: 0;
+    overflow: visible; min-width: 20px; min-height: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #D4786A;
+    letter-spacing: 0.08em;
+  }
+  .region-banner.selected {
+    border: 1.5px dashed rgba(212,120,106,0.45);
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(212,120,106,0.08);
+  }
 
-	  /* ── 日期（浮动） ── */
-	  .region.region-date {
-	    background: transparent; border: none; border-radius: 0;
-	    overflow: visible; min-width: 20px; min-height: 14px;
-	    display: flex; flex-direction: column;
-	    align-items: center; justify-content: center;
-	    gap: 1px;
-	  }
-	  .region-date.selected {
-	    border: 1.5px dashed rgba(74,63,53,0.35);
-	    border-radius: 4px;
-	    box-shadow: 0 0 0 4px rgba(74,63,53,0.08);
-	  }
-	  .region-date .date-main {
-	    font-size: 10px; font-weight: 700; color: #4A3F35;
-	    pointer-events: none;
-	  }
-	  .region-date .date-sub {
-	    font-size: 7px; color: #8C7B6B;
-	    display: flex; gap: 6px; pointer-events: none;
-	  }
+  /* ── 日期（浮动） ── */
+  .region.region-date {
+    background: transparent; border: none; border-radius: 0;
+    overflow: visible; min-width: 20px; min-height: 14px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1px;
+  }
+  .region-date.selected {
+    border: 1.5px dashed rgba(74,63,53,0.35);
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(74,63,53,0.08);
+  }
+  .region-date .date-main {
+    font-size: 10px; font-weight: 700; color: #4A3F35;
+    pointer-events: none;
+  }
+  .region-date .date-sub {
+    font-size: 7px; color: #8C7B6B;
+    display: flex; gap: 6px; pointer-events: none;
+  }
 
-	  /* ── 贴纸（浮动emoji） ── */
-	  .region.region-sticker {
-	    background: transparent; border: none; border-radius: 0;
-	    overflow: visible; min-width: 16px; min-height: 16px;
-	    display: flex; align-items: center; justify-content: center;
-	    font-size: 16px; opacity: 0.7;
-	  }
-	  .region-sticker.selected {
-	    border: 1.5px dashed rgba(200,168,130,0.5);
-	    border-radius: 50%;
-	    box-shadow: 0 0 0 4px rgba(200,168,130,0.1);
-	    opacity: 1;
-	  }
+  /* ── 贴纸（浮动emoji） ── */
+  .region.region-sticker {
+    background: transparent; border: none; border-radius: 0;
+    overflow: visible; min-width: 16px; min-height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; opacity: 0.7;
+  }
+  .region-sticker.selected {
+    border: 1.5px dashed rgba(200,168,130,0.5);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(200,168,130,0.1);
+    opacity: 1;
+  }
 
-	  /* ── 总结卡片 ── */
-	  .region.region-summary {
-	    background: rgba(255,255,255,0.85);
-	    border: 1.5px solid #D4C8A0;
-	    border-radius: 8px;
-	    display: flex; flex-direction: column;
-	    padding: 0; overflow: hidden;
-	    pointer-events: none;
-	  }
-	  .region-summary .summary-title {
-	    font-size: 8px; font-weight: 700; color: #C9A96E;
-	    padding: 3px 6px 0 6px; flex-shrink: 0;
-	  }
-	  .region-summary .summary-cols {
-	    flex: 1; display: flex; gap: 3px; padding: 2px 4px 4px 4px;
-	  }
-	  .region-summary .summary-col {
-	    flex: 1; background: #FDF8F0; border-radius: 4px;
-	    font-size: 6px; color: #B0A0A0; text-align: center;
-	    padding: 2px; display: flex; flex-direction: column;
-	    justify-content: center; gap: 1px;
-	  }
-	  .region-summary .summary-col strong {
-	    font-size: 7px; color: #8C7B6B; display: block;
-	  }
+  /* ── 竖排文字 ── */
+  .region.vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+  }
+  .region-title.vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.2em;
+  }
+  .region-text.vertical-text .text-header {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    padding: 4px 2px 0 2px;
+  }
+  .region-text.vertical-text .text-body {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    padding: 2px 4px 4px 2px;
+  }
+  .region-banner.vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.15em;
+  }
+  .region-date.vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+  }
 
-	  .region .del-btn {
-	    position: absolute; top: -10px; right: -10px;
-	    width: 24px; height: 24px; border-radius: 50%;
-	    background: var(--danger); color: #fff;
-	    border: 2px solid #fff; font-size: 16px; line-height: 20px;
-	    cursor: pointer; display: none; z-index: 5;
-	    text-align: center; padding: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-	  }
-	  .region.selected .del-btn { display:block; }
+  /* ── 总结卡片 ── */
+  .region.region-summary {
+    background: rgba(255,255,255,0.85);
+    border: 1.5px solid #D4C8A0;
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+    padding: 0; overflow: hidden;
+  }
+  .region-summary .summary-title {
+    font-size: 8px; font-weight: 700; color: #C9A96E;
+    padding: 3px 6px 0 6px; flex-shrink: 0;
+  }
+  .region-summary .summary-cols {
+    flex: 1; display: flex; gap: 3px; padding: 2px 4px 4px 4px;
+  }
+  .region-summary .summary-col {
+    flex: 1; background: #FDF8F0; border-radius: 4px;
+    font-size: 6px; color: #B0A0A0; text-align: center;
+    padding: 2px; display: flex; flex-direction: column;
+    justify-content: center; gap: 1px;
+  }
+  .region-summary .summary-col strong {
+    font-size: 7px; color: #8C7B6B; display: block;
+  }
 
-	  .region .resize-handle {
-	    position: absolute; bottom: -7px; right: -7px;
-	    width: 20px; height: 20px; border-radius: 50%;
-	    background: var(--text); border: 2.5px solid #fff;
-	    cursor: nwse-resize; display: none; z-index: 5;
-	    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-	  }
-	  .region.selected .resize-handle { display:block; }
+  .region .del-btn {
+    position: absolute; top: -10px; right: -10px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--danger); color: #fff;
+    border: 2px solid #fff; font-size: 16px; line-height: 20px;
+    cursor: pointer; display: none; z-index: 5;
+    text-align: center; padding: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .region.selected .del-btn { display:block; }
 
-	  .region .rotate-handle {
-	    position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
-	    width: 24px; height: 24px; border-radius: 50%;
-	    background: var(--accent); border: 2.5px solid #fff;
-	    cursor: grab; display: none; z-index: 5;
-	    font-size: 12px; line-height: 19px; text-align: center; color: #fff;
-	    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-	  }
-	  .region.selected .rotate-handle { display:block; }
+  .region .resize-handle {
+    position: absolute; bottom: -7px; right: -7px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--text); border: 2.5px solid #fff;
+    cursor: nwse-resize; display: none; z-index: 5;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .region.selected .resize-handle { display:block; }
 
-	  .region .info-badge {
-	    position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-	    background: var(--text); color: #fff; font-size: 9px; padding: 1px 6px;
-	    border-radius: 8px; white-space: nowrap; display: none;
-	    pointer-events: none;
-	  }
-	  .region.selected .info-badge { display:block; }
+  .region .rotate-handle {
+    position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); border: 2.5px solid #fff;
+    cursor: grab; display: none; z-index: 5;
+    font-size: 12px; line-height: 19px; text-align: center; color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .region.selected .rotate-handle { display:block; }
+
+  .region .info-badge {
+    position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: #fff; font-size: 9px; padding: 1px 6px;
+    border-radius: 8px; white-space: nowrap; display: none !important;
+    pointer-events: none;
+  }
+  .region.selected .info-badge { display:none !important; }
 
   /* ── 吸附线 ── */
   .snap-line {
@@ -376,6 +408,8 @@
 <div class="topbar">
   <div class="tabs-scroll" id="tabs"></div>
   <button class="btn snap-toggle on" id="snapBtn" onclick="toggleSnap()" title="吸附对齐">⫿</button>
+  <button class="btn" onclick="undo()" title="撤销 Ctrl+Z">↩</button>
+  <button class="btn" onclick="redo()" title="重做 Ctrl+Shift+Z">↪</button>
   <button class="btn" onclick="toggleGrid()" title="网格">⊞</button>
   <button class="btn" onclick="exportJSON()" title="导出">↗</button>
 </div>
@@ -423,196 +457,232 @@
 
 <script>
 // ═══════════════════════════════════════════
-// 模板数据 — 与 Flutter templates.dart 完全同步
+// 模板数据 — 与 Flutter templates.dart 完全同步 (v8)
+// regions 和 stickers 分开存储
 // ═══════════════════════════════════════════
 const TEMPLATES = [
-  {id:'l01',name:'标题横幅',regions:[
-	    {type:'title',x:0.053,y:0.022,w:0.50,h:0.07,style:'title'},
-	    {type:'date',x:0.053,y:0.092,w:0.36,h:0.06},
-	    {type:'banner',x:0.053,y:0.196,w:0.893,h:0.12,style:'banner'},
-	    {type:'photo',x:0.693,y:0.115,w:0.253,h:0.22,style:'photo'},
-	    {type:'diary',x:0.053,y:0.408,w:0.453,h:0.14},
-	    {type:'done',x:0.053,y:0.558,w:0.453,h:0.14},
-	    {type:'thanks',x:0.053,y:0.708,w:0.453,h:0.14},
-	    {type:'gain',x:0.533,y:0.408,w:0.413,h:0.12},
-	    {type:'improve',x:0.533,y:0.538,w:0.413,h:0.12},
-	    {type:'expect',x:0.533,y:0.668,w:0.413,h:0.12},
-	    {type:'photo',x:0.533,y:0.798,w:0.413,h:0.08,style:'photo'},
-	    {type:'sticker',x:0.80,y:0.03,w:0.06,h:0.06},
-	    {type:'sticker',x:0.88,y:0.35,w:0.06,h:0.06},
-	    {type:'sticker',x:0.85,y:0.92,w:0.06,h:0.06}
-	  ]},
-  {id:'l02',name:'侧边栏',regions:[
-	    {type:'photo',x:0.053,y:0.022,w:0.32,h:0.18,style:'photo'},
-	    {type:'photo',x:0.053,y:0.215,w:0.32,h:0.18,style:'photo'},
-	    {type:'title',x:0.053,y:0.408,w:0.32,h:0.08,style:'title'},
-	    {type:'photo',x:0.053,y:0.50,w:0.32,h:0.18,style:'photo'},
-	    {type:'date',x:0.413,y:0.022,w:0.533,h:0.08},
-	    {type:'diary',x:0.413,y:0.115,w:0.533,h:0.10},
-	    {type:'done',x:0.413,y:0.228,w:0.533,h:0.10},
-	    {type:'thanks',x:0.413,y:0.341,w:0.533,h:0.10},
-	    {type:'photo',x:0.413,y:0.454,w:0.533,h:0.09,style:'photo'},
-	    {type:'happy',x:0.413,y:0.557,w:0.533,h:0.10},
-	    {type:'gain',x:0.413,y:0.670,w:0.533,h:0.09},
-	    {type:'improve',x:0.413,y:0.773,w:0.533,h:0.09},
-	    {type:'expect',x:0.413,y:0.876,w:0.533,h:0.09},
-	    {type:'sticker',x:0.05,y:0.60,w:0.06,h:0.06},
-	    {type:'sticker',x:0.85,y:0.05,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.50,w:0.06,h:0.06},
-	    {type:'sticker',x:0.05,y:0.92,w:0.06,h:0.06}
-	  ]},
-  {id:'l03',name:'竖图左栏',regions:[
-    {type:'photo',x:0.053,y:0.022,w:0.36,h:0.50,style:'photo'},
-    {type:'title',x:0.453,y:0.027,w:0.493,h:0.07,style:'title'},
-    {type:'date',x:0.453,y:0.10,w:0.493,h:0.06},
-    {type:'diary',x:0.453,y:0.18,w:0.493,h:0.18},
-    {type:'done',x:0.053,y:0.55,w:0.453,h:0.12},
-    {type:'thanks',x:0.053,y:0.68,w:0.453,h:0.12},
-    {type:'happy',x:0.533,y:0.55,w:0.413,h:0.10},
-    {type:'gain',x:0.533,y:0.66,w:0.413,h:0.10},
-    {type:'improve',x:0.533,y:0.77,w:0.413,h:0.10},
-    {type:'expect',x:0.533,y:0.88,w:0.413,h:0.10},
-	    {type:'sticker',x:0.05,y:0.53,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.03,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.40,w:0.06,h:0.06}
-	  ]},
-	  {id:'l04',name:'杂志风格',regions:[
-	    {type:'date',x:0.053,y:0.022,w:0.18,h:0.09},
-	    {type:'photo',x:0.26,y:0.022,w:0.18,h:0.09,style:'photo'},
-	    {type:'photo',x:0.28,y:0.088,w:0.44,h:0.33,style:'photo'},
-	    {type:'title',x:0.25,y:0.44,w:0.50,h:0.06,style:'title'},
-	    {type:'diary',x:0.053,y:0.53,w:0.44,h:0.12},
-	    {type:'done',x:0.053,y:0.66,w:0.44,h:0.12},
-	    {type:'thanks',x:0.053,y:0.79,w:0.44,h:0.12},
-	    {type:'happy',x:0.52,y:0.53,w:0.44,h:0.12},
-	    {type:'gain',x:0.52,y:0.66,w:0.44,h:0.12},
-	    {type:'improve',x:0.52,y:0.79,w:0.44,h:0.12},
-	    {type:'expect',x:0.053,y:0.92,w:0.90,h:0.06},
-	    {type:'sticker',x:0.05,y:0.12,w:0.06,h:0.06},
-	    {type:'sticker',x:0.75,y:0.02,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.50,w:0.06,h:0.06},
-	    {type:'sticker',x:0.05,y:0.50,w:0.06,h:0.06}
-	  ]},
-	  {id:'l05',name:'棋盘格',regions:[
-	    {type:'photo',x:0.053,y:0.014,w:0.28,h:0.18,style:'photo'},
-	    {type:'date',x:0.36,y:0.014,w:0.28,h:0.18},
-	    {type:'photo',x:0.667,y:0.014,w:0.28,h:0.18,style:'photo'},
-	    {type:'photo',x:0.053,y:0.208,w:0.28,h:0.18,style:'photo'},
-	    {type:'banner',x:0.36,y:0.208,w:0.28,h:0.18},
-	    {type:'title',x:0.25,y:0.405,w:0.50,h:0.06,style:'title'},
-	    {type:'diary',x:0.053,y:0.48,w:0.893,h:0.08},
-	    {type:'done',x:0.053,y:0.57,w:0.893,h:0.08},
-	    {type:'thanks',x:0.053,y:0.66,w:0.893,h:0.08},
-	    {type:'happy',x:0.053,y:0.75,w:0.893,h:0.08},
-	    {type:'summary',x:0.053,y:0.84,w:0.893,h:0.14},
-	    {type:'sticker',x:0.05,y:0.39,w:0.06,h:0.06},
-	    {type:'sticker',x:0.88,y:0.39,w:0.06,h:0.06},
-	    {type:'sticker',x:0.88,y:0.80,w:0.06,h:0.06}
-	  ]},
-	  {id:'l06',name:'Hero通栏',regions:[
-	    {type:'title',x:0.0,y:0.0,w:1.0,h:0.073,style:'title'},
-	    {type:'photo',x:0.053,y:0.086,w:0.387,h:0.257,style:'photo'},
-	    {type:'date',x:0.467,y:0.086,w:0.48,h:0.10},
-	    {type:'diary',x:0.467,y:0.20,w:0.48,h:0.14},
-	    {type:'done',x:0.053,y:0.357,w:0.44,h:0.14},
-	    {type:'thanks',x:0.053,y:0.51,w:0.44,h:0.14},
-	    {type:'photo',x:0.52,y:0.357,w:0.427,h:0.14,style:'photo'},
-	    {type:'happy',x:0.52,y:0.51,w:0.427,h:0.14},
-	    {type:'summary',x:0.053,y:0.68,w:0.893,h:0.29},
-	    {type:'sticker',x:0.90,y:0.02,w:0.06,h:0.06},
-	    {type:'sticker',x:0.05,y:0.34,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.34,w:0.06,h:0.06},
-	    {type:'sticker',x:0.05,y:0.65,w:0.06,h:0.06}
-	  ]},
-	  {id:'l07',name:'动态倾斜',regions:[
-	    {type:'photo',x:0.053,y:0.019,w:0.267,h:0.135,style:'photo'},
-	    {type:'date',x:0.36,y:0.019,w:0.413,h:0.10,rotation:-3},
-	    {type:'diary',x:0.053,y:0.176,w:0.893,h:0.12,rotation:2},
-	    {type:'photo',x:0.053,y:0.311,w:0.293,h:0.149,style:'photo'},
-	    {type:'done',x:0.387,y:0.324,w:0.56,h:0.10,rotation:-2},
-	    {type:'thanks',x:0.053,y:0.486,w:0.893,h:0.10},
-	    {type:'happy',x:0.053,y:0.608,w:0.893,h:0.10,rotation:1},
-	    {type:'summary',x:0.053,y:0.73,w:0.893,h:0.14,rotation:-1},
-	    {type:'banner',x:0.053,y:0.90,w:0.893,h:0.08,style:'banner'},
-	    {type:'sticker',x:0.88,y:0.02,w:0.06,h:0.06},
-	    {type:'sticker',x:0.05,y:0.16,w:0.06,h:0.06},
-	    {type:'sticker',x:0.88,y:0.47,w:0.06,h:0.06},
-	    {type:'sticker',x:0.05,y:0.70,w:0.06,h:0.06}
-  ]},
-  {id:'l08',name:'逐行卡片',regions:[
-	    {type:'title',x:0.064,y:0.019,w:0.40,h:0.06,style:'title'},
-	    {type:'photo',x:0.547,y:0.019,w:0.40,h:0.23,style:'photo'},
-	    {type:'date',x:0.064,y:0.265,w:0.872,h:0.07},
-	    {type:'diary',x:0.064,y:0.345,w:0.872,h:0.08},
-	    {type:'done',x:0.064,y:0.435,w:0.872,h:0.08},
-	    {type:'thanks',x:0.064,y:0.525,w:0.872,h:0.08},
-	    {type:'happy',x:0.064,y:0.615,w:0.872,h:0.08},
-	    {type:'summary',x:0.064,y:0.705,w:0.872,h:0.12},
-	    {type:'sticker',x:0.02,y:0.01,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.02,w:0.06,h:0.06},
-	    {type:'sticker',x:0.02,y:0.25,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.60,w:0.06,h:0.06}
-	  ]},
-  {id:'l09',name:'三栏布局',regions:[
-	    {type:'date',x:0.053,y:0.016,w:0.28,h:0.08},
-	    {type:'diary',x:0.053,y:0.11,w:0.28,h:0.14},
-	    {type:'done',x:0.053,y:0.26,w:0.28,h:0.14},
-	    {type:'thanks',x:0.36,y:0.016,w:0.28,h:0.14},
-	    {type:'happy',x:0.36,y:0.17,w:0.28,h:0.14},
-	    {type:'gain',x:0.36,y:0.32,w:0.28,h:0.12},
-	    {type:'photo',x:0.667,y:0.016,w:0.28,h:0.14,style:'photo'},
-	    {type:'improve',x:0.667,y:0.17,w:0.28,h:0.12},
-	    {type:'expect',x:0.667,y:0.30,w:0.28,h:0.12},
-	    {type:'summary',x:0.053,y:0.45,w:0.893,h:0.06},
-	    {type:'banner',x:0.053,y:0.53,w:0.893,h:0.45,style:'banner'},
-	    {type:'sticker',x:0.02,y:0.01,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.42,w:0.06,h:0.06},
-	    {type:'sticker',x:0.02,y:0.42,w:0.06,h:0.06}
-	  ]},
-  {id:'l10',name:'标签堆叠',regions:[
-	    {type:'date',x:0.053,y:0.019,w:0.893,h:0.08,style:'label'},
-	    {type:'photo',x:0.053,y:0.11,w:0.893,h:0.16,style:'photo'},
-	    {type:'title',x:0.053,y:0.28,w:0.893,h:0.08,style:'title'},
-	    {type:'diary',x:0.053,y:0.37,w:0.893,h:0.10,style:'label'},
-	    {type:'done',x:0.053,y:0.48,w:0.893,h:0.10,style:'label'},
-	    {type:'thanks',x:0.053,y:0.59,w:0.893,h:0.10,style:'label'},
-	    {type:'happy',x:0.053,y:0.70,w:0.893,h:0.10,style:'label'},
-	    {type:'summary',x:0.053,y:0.81,w:0.893,h:0.17,style:'label'},
-	    {type:'sticker',x:0.02,y:0.02,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.10,w:0.06,h:0.06},
-	    {type:'sticker',x:0.02,y:0.27,w:0.06,h:0.06},
-	    {type:'sticker',x:0.90,y:0.69,w:0.06,h:0.06}
-	  ]}
+  { id:'l01', name:'标题横幅',
+    regions: [
+      {type:'title',  x:0.053,y:0.030,w:0.609,h:0.085,style:'title'},
+      {type:'date',   x:0.058,y:0.115,w:0.360,h:0.060},
+      {type:'photo',  x:0.657,y:0.143,w:0.253,h:0.220,style:'photo',rotation:6.11},
+      {type:'diary',  x:0.047,y:0.192,w:0.643,h:0.171},
+      {type:'done',   x:0.053,y:0.558,w:0.453,h:0.140},
+      {type:'thanks', x:0.053,y:0.708,w:0.453,h:0.140},
+      {type:'gain',   x:0.533,y:0.380,w:0.413,h:0.120},
+      {type:'improve',x:0.533,y:0.508,w:0.413,h:0.120},
+      {type:'expect', x:0.536,y:0.638,w:0.413,h:0.120},
+      {type:'photo',  x:0.542,y:0.778,w:0.402,h:0.114,style:'photo'},
+    ],
+    stickers: [
+      {x:0.047,y:0.363,w:0.437,h:0.182},
+      {x:0.556,y:0.038,w:0.390,h:0.077},
+      {x:0.058,y:0.917,w:0.896,h:0.052},
+    ]
+  },
+  { id:'l02', name:'侧边栏',
+    regions: [
+      {type:'photo',  x:0.050,y:0.041,w:0.320,h:0.180,style:'photo'},
+      {type:'photo',  x:0.050,y:0.696,w:0.320,h:0.180,style:'photo'},
+      {type:'title',  x:0.568,y:0.404,w:0.221,h:0.242,style:'title',vertical:true},
+      {type:'date',   x:0.424,y:0.041,w:0.508,h:0.090},
+      {type:'diary',  x:0.043,y:0.390,w:0.490,h:0.270},
+      {type:'done',   x:0.425,y:0.152,w:0.533,h:0.100},
+      {type:'thanks', x:0.425,y:0.262,w:0.533,h:0.100},
+      {type:'gain',   x:0.413,y:0.670,w:0.533,h:0.090},
+      {type:'improve',x:0.413,y:0.773,w:0.533,h:0.090},
+      {type:'expect', x:0.413,y:0.876,w:0.533,h:0.090},
+    ],
+    stickers: [
+      {x:0.043,y:0.252,w:0.341,h:0.132},
+      {x:0.398,y:0.552,w:0.135,h:0.378},
+      {x:0.050,y:0.888,w:0.320,h:0.083},
+      {x:0.754,y:0.418,w:0.192,h:0.214},
+    ]
+  },
+  { id:'l03', name:'竖图左栏',
+    regions: [
+      {type:'photo',  x:0.053,y:0.020,w:0.414,h:0.259,style:'photo'},
+      {type:'title',  x:0.533,y:0.088,w:0.404,h:0.077,style:'title',rotation:15.28},
+      {type:'date',   x:0.512,y:0.201,w:0.414,h:0.079},
+      {type:'diary',  x:0.049,y:0.291,w:0.901,h:0.182},
+      {type:'done',   x:0.053,y:0.550,w:0.453,h:0.120},
+      {type:'thanks', x:0.049,y:0.684,w:0.453,h:0.120},
+      {type:'happy',  x:0.533,y:0.550,w:0.413,h:0.100},
+      {type:'gain',   x:0.533,y:0.660,w:0.413,h:0.100},
+      {type:'improve',x:0.535,y:0.770,w:0.413,h:0.100},
+      {type:'expect', x:0.533,y:0.880,w:0.413,h:0.100},
+      {type:'photo',  x:0.084,y:0.823,w:0.206,h:0.146,style:'photo',rotation:-12.36},
+    ],
+    stickers: [
+      {x:0.760,y:0.020,w:0.208,h:0.090,rotation:-6.97},
+      {x:0.095,y:0.484,w:0.799,h:0.046},
+      {x:0.323,y:0.819,w:0.189,h:0.141,rotation:20.65},
+    ]
+  },
+  { id:'l04', name:'杂志风格',
+    regions: [
+      {type:'date',   x:0.048,y:0.019,w:0.475,h:0.047},
+      {type:'photo',  x:0.406,y:0.080,w:0.194,h:0.165,style:'photo'},
+      {type:'photo',  x:0.406,y:0.249,w:0.200,h:0.168,style:'photo'},
+      {type:'title',  x:0.115,y:0.428,w:0.771,h:0.091,style:'title'},
+      {type:'diary',  x:0.028,y:0.080,w:0.360,h:0.337},
+      {type:'done',   x:0.619,y:0.080,w:0.359,h:0.175},
+      {type:'thanks', x:0.030,y:0.530,w:0.941,h:0.078},
+      {type:'gain',   x:0.030,y:0.637,w:0.429,h:0.134},
+      {type:'improve',x:0.523,y:0.637,w:0.426,h:0.134},
+      {type:'expect', x:0.517,y:0.787,w:0.432,h:0.132},
+    ],
+    stickers: [
+      {x:0.661,y:0.285,w:0.274,h:0.132},
+      {x:0.046,y:0.790,w:0.415,h:0.109},
+      {x:0.058,y:0.936,w:0.897,h:0.050},
+    ]
+  },
+  { id:'l05', name:'棋盘格',
+    regions: [
+      {type:'date',   x:0.248,y:0.561,w:0.500,h:0.050},
+      {type:'photo',  x:0.326,y:0.200,w:0.343,h:0.248,style:'photo'},
+      {type:'title',  x:0.080,y:0.474,w:0.840,h:0.069,style:'title'},
+      {type:'diary',  x:0.055,y:0.622,w:0.886,h:0.204},
+      {type:'done',   x:0.050,y:0.037,w:0.348,h:0.139},
+      {type:'thanks', x:0.586,y:0.037,w:0.353,h:0.136},
+      {type:'summary',x:0.053,y:0.840,w:0.893,h:0.140},
+    ],
+    stickers: [
+      {x:0.412,y:0.057,w:0.172,h:0.119},
+      {x:0.050,y:0.200,w:0.246,h:0.233},
+      {x:0.687,y:0.200,w:0.259,h:0.274},
+    ]
+  },
+  { id:'l06', name:'Hero通栏',
+    regions: [
+      {type:'title',  x:0.000,y:0.000,w:1.000,h:0.073,style:'title'},
+      {type:'photo',  x:0.053,y:0.086,w:0.387,h:0.257,style:'photo'},
+      {type:'date',   x:0.469,y:0.086,w:0.483,h:0.058},
+      {type:'diary',  x:0.499,y:0.144,w:0.461,h:0.331},
+      {type:'done',   x:0.053,y:0.362,w:0.386,h:0.138},
+      {type:'thanks', x:0.047,y:0.515,w:0.393,h:0.140},
+      {type:'summary',x:0.053,y:0.680,w:0.893,h:0.290},
+      {type:'photo',  x:0.729,y:0.500,w:0.203,h:0.139,rotation:16.35},
+    ],
+    stickers: [
+      {x:0.472,y:0.498,w:0.196,h:0.169,rotation:-15.87},
+      {x:0.790,y:0.022,w:0.161,h:0.083},
+      {x:0.047,y:0.048,w:0.113,h:0.067,rotation:-20.62},
+    ]
+  },
+  { id:'l07', name:'动态倾斜',
+    regions: [
+      {type:'photo',  x:0.727,y:0.236,w:0.115,h:0.098,style:'photo',rotation:-18.21},
+      {type:'date',   x:0.541,y:0.034,w:0.413,h:0.100,rotation:-0.14},
+      {type:'diary',  x:0.070,y:0.125,w:0.493,h:0.257,rotation:7.51},
+      {type:'photo',  x:0.349,y:0.041,w:0.142,h:0.103,style:'photo',rotation:17.94},
+      {type:'done',   x:0.583,y:0.327,w:0.377,h:0.191,rotation:-7.76},
+      {type:'thanks', x:0.095,y:0.498,w:0.392,h:0.209,rotation:11.88},
+      {type:'summary',x:0.053,y:0.730,w:0.893,h:0.140,rotation:-1},
+      {type:'title',  x:0.064,y:0.894,w:0.905,h:0.076},
+      {type:'photo',  x:0.314,y:0.407,w:0.140,h:0.107,rotation:20},
+    ],
+    stickers: [
+      {x:0.712,y:0.146,w:0.156,h:0.055,rotation:-16.13},
+      {x:0.071,y:0.411,w:0.145,h:0.061},
+      {x:0.553,y:0.563,w:0.369,h:0.143,rotation:-1.32},
+      {x:0.132,y:0.037,w:0.155,h:0.078,rotation:-1.74},
+    ]
+  },
+  { id:'l08', name:'逐行卡片',
+    regions: [
+      {type:'title',  x:0.064,y:0.019,w:0.400,h:0.060,style:'title'},
+      {type:'date',   x:0.075,y:0.286,w:0.872,h:0.070},
+      {type:'diary',  x:0.067,y:0.088,w:0.876,h:0.177},
+      {type:'done',   x:0.068,y:0.846,w:0.638,h:0.118},
+      {type:'thanks', x:0.285,y:0.566,w:0.640,h:0.120},
+      {type:'summary',x:0.064,y:0.705,w:0.872,h:0.120},
+      {type:'photo',  x:0.075,y:0.564,w:0.177,h:0.120},
+      {type:'photo',  x:0.759,y:0.846,w:0.172,h:0.119},
+      {type:'photo',  x:0.646,y:0.356,w:0.280,h:0.188},
+    ],
+    stickers: [
+      {x:0.082,y:0.362,w:0.236,h:0.174,rotation:-10.62},
+      {x:0.351,y:0.386,w:0.221,h:0.147,rotation:5.21},
+      {x:0.744,y:0.027,w:0.190,h:0.074,rotation:10.24},
+    ]
+  },
+  { id:'l09', name:'三栏布局',
+    regions: [
+      {type:'date',   x:0.046,y:0.031,w:0.501,h:0.050},
+      {type:'diary',  x:0.053,y:0.689,w:0.719,h:0.271},
+      {type:'done',   x:0.053,y:0.103,w:0.247,h:0.317,vertical:true},
+      {type:'thanks', x:0.701,y:0.103,w:0.245,h:0.319,vertical:true},
+      {type:'photo',  x:0.338,y:0.128,w:0.324,h:0.267,style:'photo'},
+      {type:'summary',x:0.053,y:0.450,w:0.893,h:0.060},
+      {type:'photo',  x:0.628,y:0.537,w:0.316,h:0.235},
+      {type:'title',  x:0.069,y:0.535,w:0.518,h:0.124},
+    ],
+    stickers: [
+      {x:0.900,y:0.420,w:0.060,h:0.060},
+      {x:0.590,y:0.031,w:0.144,h:0.121,rotation:18.79},
+      {x:0.784,y:0.796,w:0.160,h:0.165,rotation:12.62},
+    ]
+  },
+  { id:'l10', name:'标签堆叠',
+    regions: [
+      {type:'date',   x:0.059,y:0.031,w:0.418,h:0.071,style:'label'},
+      {type:'title',  x:0.067,y:0.364,w:0.867,h:0.081,style:'title'},
+      {type:'diary',  x:0.049,y:0.156,w:0.901,h:0.225,style:'label'},
+      {type:'done',   x:0.299,y:0.645,w:0.644,h:0.151,style:'label'},
+      {type:'thanks', x:0.053,y:0.482,w:0.631,h:0.148,style:'label'},
+      {type:'summary',x:0.053,y:0.810,w:0.893,h:0.170,style:'label'},
+      {type:'photo',  x:0.742,y:0.487,w:0.190,h:0.137},
+      {type:'photo',  x:0.064,y:0.646,w:0.203,h:0.147},
+      {type:'photo',  x:0.771,y:0.037,w:0.132,h:0.102,rotation:17.22},
+    ],
+    stickers: [
+      {x:0.543,y:0.042,w:0.192,h:0.071},
+      {x:0.613,y:0.595,w:0.159,h:0.056},
+      {x:0.059,y:0.405,w:0.160,h:0.073},
+      {x:0.825,y:0.778,w:0.139,h:0.071},
+    ]
+  }
 ];
 
 const COLORS = {
-	  date:'#E8D4B8',diary:'#FFF3E0',done:'#DCE8F5',thanks:'#EDE0F0',
-	  photo:'#D8EDD8',happy:'#FFF8E1',gain:'#D5EDEA',improve:'#FADBD8',
-	  expect:'#E0E3F0',title:'#FADBD8',banner:'#FFCCBC',summary:'#DCEDC8'
-	};
-	const LABELS = {
-	  date:'📅 日期',diary:'📝 发生了什么事',done:'✅ 今日完成',thanks:'💕 感恩小事',
-	  photo:'📷 照片',happy:'😊 最开心的事',gain:'🌟 收获',improve:'💡 改进',
-	  expect:'✨ 期待',title:'📌 标题',banner:'🎀 横幅',summary:'📊 今日总结',
-	  sticker:'💮 贴纸'
-	};
-	const HINTS = {
-	  diary:'点击输入日记内容...', done:'点击记录完成的事项...',
-	  thanks:'记录想感谢的人和事...', happy:'点击输入最开心的事...',
-	  gain:'今天的收获...', improve:'需要改进的地方...', expect:'明天的期待...'
-	};
-	const GOLD_TYPES = ['happy','gain','improve','expect'];
-	const STICKER_EMOJIS = ['⭐','💫','🌸','✨','🌿','🍀','🦋','🌙','💖','🎀','🌟','🪷','🍃','🕊️','💎','🧸'];
-	const ALL_TYPES = ['date','diary','done','thanks','photo','happy','gain','improve','expect','title','banner','summary','sticker'];
+  date:'#E8D4B8',diary:'#FFF3E0',done:'#DCE8F5',thanks:'#EDE0F0',
+  photo:'#D8EDD8',happy:'#FFF8E1',gain:'#D5EDEA',improve:'#FADBD8',
+  expect:'#E0E3F0',title:'#FADBD8',banner:'#FFCCBC',summary:'#DCEDC8'
+};
+const LABELS = {
+  date:'📅 日期',diary:'📝 发生了什么事',done:'✅ 今日完成',thanks:'💕 感恩小事',
+  photo:'📷 照片',happy:'😊 最开心的事',gain:'🌟 收获',improve:'💡 改进',
+  expect:'✨ 期待',title:'📌 标题',banner:'🎀 横幅',summary:'📊 今日总结',
+  sticker:'💮 贴纸'
+};
+const HINTS = {
+  diary:'点击输入日记内容...', done:'点击记录完成的事项...',
+  thanks:'记录想感谢的人和事...', happy:'点击输入最开心的事...',
+  gain:'今天的收获...', improve:'需要改进的地方...', expect:'明天的期待...'
+};
+const GOLD_TYPES = ['happy','gain','improve','expect'];
+const STICKER_EMOJIS = ['⭐','💫','🌸','✨','🌿','🍀','🦋','🌙','💖','🎀'];
+const REGION_TYPES = ['date','diary','done','thanks','photo','happy','gain','improve','expect','title','banner','summary'];
+const STICKER_TYPE = 'sticker';
 
 // ── 状态 ──
 let currentIdx = 0;
-let currentRegions = JSON.parse(JSON.stringify(TEMPLATES[0].regions));
+let currentRegions = [];
+let currentStickers = [];
 let selectedIdx = -1;
+let selectedIsSticker = false;
+let allItems = [];
 let showGrid = true;
 let zoom = 1;
 let dragState = null;
 let snapEnabled = true;
+let undoStack = [];
+let redoStack = [];
+const MAX_UNDO = 50;
+let savedStates = {}; // per-template saved state: { id: {regions, stickers, undoStack, redoStack} }
 
 // ── DOM ──
 const canvas = document.getElementById('canvas');
@@ -627,8 +697,83 @@ const jsonPre = document.getElementById('jsonPre');
 const modalTitle = document.getElementById('modalTitle');
 const bottombar = document.getElementById('bottombar');
 
+function loadTemplate(idx) {
+  const t = TEMPLATES[idx];
+  const id = t.id;
+  // 从保存状态恢复，否则从原始模板加载
+  if (savedStates[id]) {
+    const s = savedStates[id];
+    currentRegions = JSON.parse(JSON.stringify(s.regions));
+    currentStickers = JSON.parse(JSON.stringify(s.stickers));
+    undoStack = JSON.parse(JSON.stringify(s.undoStack || []));
+    redoStack = JSON.parse(JSON.stringify(s.redoStack || []));
+  } else {
+    currentRegions = JSON.parse(JSON.stringify(t.regions));
+    currentStickers = JSON.parse(JSON.stringify(t.stickers || []));
+    undoStack = [];
+    redoStack = [];
+  }
+  selectedIdx = -1;
+  selectedIsSticker = false;
+  rebuildAllItems();
+}
+
+function rebuildAllItems() {
+  allItems = [];
+  currentRegions.forEach((r, i) => allItems.push({...r, _idx: i, _isSticker: false}));
+  currentStickers.forEach((s, i) => allItems.push({...s, _idx: i, _isSticker: true, type: 'sticker'}));
+}
+
+function saveState() {
+  undoStack.push({regions: JSON.parse(JSON.stringify(currentRegions)), stickers: JSON.parse(JSON.stringify(currentStickers))});
+  if (undoStack.length > MAX_UNDO) undoStack.shift();
+  redoStack = [];
+}
+
+function undo() {
+  if (undoStack.length === 0) return;
+  syncAllItemsToStorage();
+  redoStack.push({regions: JSON.parse(JSON.stringify(currentRegions)), stickers: JSON.parse(JSON.stringify(currentStickers))});
+  const prev = undoStack.pop();
+  currentRegions = prev.regions;
+  currentStickers = prev.stickers;
+  selectedIdx = -1;
+  rebuildAllItems();
+  render();
+  updateSelInfo();
+  showToast('已撤销');
+}
+
+function redo() {
+  if (redoStack.length === 0) return;
+  syncAllItemsToStorage();
+  undoStack.push({regions: JSON.parse(JSON.stringify(currentRegions)), stickers: JSON.parse(JSON.stringify(currentStickers))});
+  const next = redoStack.pop();
+  currentRegions = next.regions;
+  currentStickers = next.stickers;
+  selectedIdx = -1;
+  rebuildAllItems();
+  render();
+  updateSelInfo();
+  showToast('已重做');
+}
+
 // ── 初始化 ──
+function updateCanvasPadding() {
+  requestAnimationFrame(() => {
+    const topH = document.querySelector('.topbar').offsetHeight;
+    const botH = document.querySelector('.bottombar').offsetHeight;
+    if (topH && botH) {
+      canvasArea.style.top = topH + 'px';
+      canvasArea.style.bottom = botH + 'px';
+    }
+  });
+}
+
 function init() {
+  updateCanvasPadding();
+  window.addEventListener('resize', updateCanvasPadding);
+
   // 顶部 tabs
   TEMPLATES.forEach((t,i) => {
     const btn = document.createElement('div');
@@ -638,8 +783,8 @@ function init() {
     tabs.appendChild(btn);
   });
 
-  // 底部类型按钮
-  ALL_TYPES.forEach(type => {
+  // 底部类型按钮（regions）
+  REGION_TYPES.forEach(type => {
     const chip = document.createElement('div');
     chip.className = 'chip';
     chip.style.background = (COLORS[type]||'#eee')+'99';
@@ -647,11 +792,43 @@ function init() {
     chip.onclick = () => addRegion(type);
     bottombar.appendChild(chip);
   });
+  // 贴纸按钮
+  const stickerChip = document.createElement('div');
+  stickerChip.className = 'chip';
+  stickerChip.style.background = '#FFE0E0';
+  stickerChip.textContent = '💮 贴纸';
+  stickerChip.onclick = () => addSticker();
+  bottombar.appendChild(stickerChip);
 
   // 底部操作按钮
   const sep = document.createElement('span');
   sep.style.cssText = 'flex-basis:100%;height:0;';
   bottombar.appendChild(sep);
+
+  const vertBtn = document.createElement('div');
+  vertBtn.className = 'act';
+  vertBtn.id = 'vertBtn';
+  vertBtn.textContent = '⇅ 竖排';
+  vertBtn.onclick = toggleVertical;
+  bottombar.appendChild(vertBtn);
+
+  // 图层顺序按钮
+  const upBtn = document.createElement('div');
+  upBtn.className = 'act';
+  upBtn.id = 'upBtn';
+  upBtn.textContent = '↑ 上移';
+  upBtn.style.opacity = '0.4';
+  upBtn.onclick = moveLayerUp;
+  bottombar.appendChild(upBtn);
+
+  const downBtn = document.createElement('div');
+  downBtn.className = 'act';
+  downBtn.id = 'downBtn';
+  downBtn.textContent = '↓ 下移';
+  downBtn.style.opacity = '0.4';
+  downBtn.onclick = moveLayerDown;
+  bottombar.appendChild(downBtn);
+
   ['重置','导出'].forEach((label,i) => {
     const btn = document.createElement('div');
     btn.className = 'act' + (i===1?' primary':'');
@@ -660,123 +837,178 @@ function init() {
     bottombar.appendChild(btn);
   });
 
+  loadTemplate(0);
   render();
   setTimeout(zoomFit, 200);
+
+  // 键盘快捷键
+  window.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+  });
 }
 
 function switchTemplate(idx) {
+  // 保存当前模板状态
+  saveCurrentTemplate();
   currentIdx = idx;
-  currentRegions = JSON.parse(JSON.stringify(TEMPLATES[idx].regions));
-  selectedIdx = -1;
   closeModal();
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  loadTemplate(idx);
   render();
   updateSelInfo();
+  updateCanvasPadding();
+}
+
+function saveCurrentTemplate() {
+  syncAllItemsToStorage();
+  const id = TEMPLATES[currentIdx].id;
+  savedStates[id] = {
+    regions: JSON.parse(JSON.stringify(currentRegions)),
+    stickers: JSON.parse(JSON.stringify(currentStickers)),
+    undoStack: JSON.parse(JSON.stringify(undoStack)),
+    redoStack: JSON.parse(JSON.stringify(redoStack)),
+  };
 }
 
 function resetTemplate() {
-  currentRegions = JSON.parse(JSON.stringify(TEMPLATES[currentIdx].regions));
-  selectedIdx = -1;
-  closeModal();
+  syncAllItemsToStorage();
+  const id = TEMPLATES[currentIdx].id;
+  delete savedStates[id];
+  loadTemplate(currentIdx);
   render();
   updateSelInfo();
   showToast('已重置');
 }
 
 function getRegionClass(r) {
-		  switch (r.type) {
-		    case 'photo': return 'photo';
-		    case 'title': return 'title';
-		    case 'banner': return 'banner';
-		    case 'date': return 'date';
-		    case 'summary': return 'summary';
-		    case 'sticker': return 'sticker';
-		    default: return 'text';
-		  }
-		}
+  switch (r.type) {
+    case 'photo': return 'photo';
+    case 'title': return 'title';
+    case 'banner': return 'banner';
+    case 'date': return 'date';
+    case 'summary': return 'summary';
+    case 'sticker': return 'sticker';
+    default: return 'text';
+  }
+}
 
-	// ── 渲染 ──
-	function render() {
-	  canvas.querySelectorAll('.region').forEach(el => el.remove());
-	  ensureSnapLines();
-	  currentRegions.forEach((r, i) => {
-	    const el = document.createElement('div');
-	    el.className = 'region region-' + getRegionClass(r);
-	    if (i === selectedIdx) el.classList.add('selected');
-	    if (GOLD_TYPES.includes(r.type)) el.classList.add('gold');
-	    el.style.left = (r.x*100)+'%';
-	    el.style.top = (r.y*100)+'%';
-	    el.style.width = (r.w*100)+'%';
-	    el.style.height = (r.h*100)+'%';
-	    el.style.zIndex = i===selectedIdx ? 10 : 1;
-	    if (r.rotation) el.style.transform = `rotate(${r.rotation}deg)`;
+// ── 渲染 ──
+function render() {
+  canvas.querySelectorAll('.region').forEach(el => el.remove());
+  ensureSnapLines();
+  allItems.forEach((r, i) => {
+    const el = document.createElement('div');
+    el.className = 'region region-' + getRegionClass(r);
+    if (i === selectedIdx) el.classList.add('selected');
+    if (GOLD_TYPES.includes(r.type)) el.classList.add('gold');
+    if (r.vertical) el.classList.add('vertical-text');
+    el.style.left = (r.x*100)+'%';
+    el.style.top = (r.y*100)+'%';
+    el.style.width = (r.w*100)+'%';
+    el.style.height = (r.h*100)+'%';
+    el.style.zIndex = i===selectedIdx ? 999 : i + 1;
+    if (r.rotation) el.style.transform = `rotate(${r.rotation}deg)`;
 
-	    // 根据类型渲染不同内容
-	    const inner = buildRegionInner(r);
-	    el.innerHTML = inner;
+    const inner = buildRegionInner(r);
+    el.innerHTML = inner;
 
-	    // 交互控件
-	    const delBtn = document.createElement('button');
-	    delBtn.className = 'del-btn';
-	    delBtn.textContent = '×';
-	    delBtn.onclick = e => { e.stopPropagation(); deleteRegion(i); };
-	    el.appendChild(delBtn);
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.textContent = '×';
+    delBtn.onclick = e => { e.stopPropagation(); deleteItem(i); };
+    el.appendChild(delBtn);
 
-	    const resizeH = document.createElement('div');
-	    resizeH.className = 'resize-handle';
-	    el.appendChild(resizeH);
+    const resizeH = document.createElement('div');
+    resizeH.className = 'resize-handle';
+    el.appendChild(resizeH);
 
-	    const rotateH = document.createElement('div');
-	    rotateH.className = 'rotate-handle';
-	    rotateH.textContent = '↻';
-	    el.appendChild(rotateH);
+    const rotateH = document.createElement('div');
+    rotateH.className = 'rotate-handle';
+    rotateH.textContent = '↻';
+    el.appendChild(rotateH);
 
-	    const badge = document.createElement('div');
-	    badge.className = 'info-badge';
-	    badge.textContent = `x${r.x.toFixed(3)} y${r.y.toFixed(3)} w${r.w.toFixed(3)} h${r.h.toFixed(3)}${r.rotation?' r'+r.rotation+'°':''}`;
-	    el.appendChild(badge);
+    el.addEventListener('pointerdown', e => onPointerDown(e, i, 'move'));
+    resizeH.addEventListener('pointerdown', e => { e.stopPropagation(); onPointerDown(e, i, 'resize'); });
+    rotateH.addEventListener('pointerdown', e => { e.stopPropagation(); onPointerDown(e, i, 'rotate'); });
 
-	    el.addEventListener('pointerdown', e => onPointerDown(e, i, 'move'));
-	    resizeH.addEventListener('pointerdown', e => { e.stopPropagation(); onPointerDown(e, i, 'resize'); });
-	    rotateH.addEventListener('pointerdown', e => { e.stopPropagation(); onPointerDown(e, i, 'rotate'); });
+    canvas.appendChild(el);
+  });
+}
 
-	    canvas.appendChild(el);
-	  });
-	}
-
-	function buildRegionInner(r) {
-	  switch (r.type) {
-	    case 'photo':
-	      return '<div class="photo-icon">📷</div><div class="photo-hint">添加照片</div>';
-	    case 'title':
-	      return '海 边 日 记';
-	    case 'banner':
-	      return '✦ 今日最开心的事 ✦';
-	    case 'date':
-	      return '<div class="date-main">2026年8月16日</div><div class="date-sub"><span>😊 开心</span><span>☀️ 晴</span></div>';
-	    case 'summary':
-	      return '<div class="summary-title">📊 今日总结</div><div class="summary-cols"><div class="summary-col"><strong>🌟 收获</strong>点击输入...</div><div class="summary-col"><strong>💡 改进</strong>点击输入...</div><div class="summary-col"><strong>✨ 期待</strong>点击输入...</div></div>';
-	    case 'sticker':
-		      const emoji = STICKER_EMOJIS[Math.floor(Math.random() * STICKER_EMOJIS.length)];
-		      return emoji;
-		    case 'diary': case 'done': case 'thanks':
-		    case 'happy': case 'gain': case 'improve': case 'expect':
-		      var isGold = GOLD_TYPES.includes(r.type);
-		      var label = LABELS[r.type] || r.type;
-		      var hint = HINTS[r.type] || '点击输入...';
-		      return '<div class="text-header">' + label + '</div><div class="text-body">' + hint + '</div>';
-		    default:
-	      return '<span style="font-size:9px;color:#999;pointer-events:none;">' + (LABELS[r.type]||r.type) + '</span>';
-	  }
-	}
+function buildRegionInner(r) {
+  switch (r.type) {
+    case 'photo':
+      return '<div class="photo-icon">📷</div><div class="photo-hint">添加照片</div>';
+    case 'title':
+      return '海 边 日 记';
+    case 'banner':
+      return '✦ 今日最开心的事 ✦';
+    case 'date':
+      return '<div class="date-main">2026年8月16日</div><div class="date-sub"><span>😊 开心</span><span>☀️ 晴</span></div>';
+    case 'summary':
+      return '<div class="summary-title">📊 今日总结</div><div class="summary-cols"><div class="summary-col"><strong>🌟 收获</strong>点击输入...</div><div class="summary-col"><strong>💡 改进</strong>点击输入...</div><div class="summary-col"><strong>✨ 期待</strong>点击输入...</div></div>';
+    case 'sticker':
+      const emoji = STICKER_EMOJIS[r._idx % STICKER_EMOJIS.length];
+      return emoji;
+    case 'diary': case 'done': case 'thanks':
+    case 'happy': case 'gain': case 'improve': case 'expect':
+      var label = LABELS[r.type] || r.type;
+      var hint = HINTS[r.type] || '点击输入...';
+      return '<div class="text-header">' + label + '</div><div class="text-body">' + hint + '</div>';
+    default:
+      return '<span style="font-size:9px;color:#999;pointer-events:none;">' + (LABELS[r.type]||r.type) + '</span>';
+  }
+}
 
 function updateSelInfo() {
-  if (selectedIdx>=0 && selectedIdx<currentRegions.length) {
-    const r = currentRegions[selectedIdx];
-    selInfo.textContent = `选中: ${LABELS[r.type]} x=${r.x.toFixed(4)} y=${r.y.toFixed(4)} w=${r.w.toFixed(4)} h=${r.h.toFixed(4)}${r.rotation?' r='+r.rotation+'°':''}`;
+  const upBtn = document.getElementById('upBtn');
+  const downBtn = document.getElementById('downBtn');
+  if (selectedIdx>=0 && selectedIdx<allItems.length) {
+    const r = allItems[selectedIdx];
+    const vertLabel = r.vertical ? ' [竖排]' : '';
+    const stickerLabel = r._isSticker ? ' [贴纸]' : '';
+    selInfo.textContent = `选中: ${LABELS[r.type]||r.type}${stickerLabel}${vertLabel} 图层${selectedIdx+1}/${allItems.length} x=${r.x.toFixed(4)} y=${r.y.toFixed(4)} w=${r.w.toFixed(4)} h=${r.h.toFixed(4)}${r.rotation?' r='+r.rotation+'°':''}`;
+    document.getElementById('vertBtn').style.opacity = r._isSticker ? '0.4' : '1';
+    document.getElementById('vertBtn').classList.toggle('primary', !r._isSticker && !!r.vertical);
+    upBtn.style.opacity = selectedIdx === allItems.length - 1 ? '0.4' : '1';
+    downBtn.style.opacity = selectedIdx === 0 ? '0.4' : '1';
   } else {
     selInfo.textContent = '点击区域选中';
+    document.getElementById('vertBtn').style.opacity = '0.4';
+    document.getElementById('vertBtn').classList.remove('primary');
+    if (upBtn) upBtn.style.opacity = '0.4';
+    if (downBtn) downBtn.style.opacity = '0.4';
   }
+}
+
+function toggleVertical() {
+  if (selectedIdx < 0) return;
+  const r = allItems[selectedIdx];
+  if (r._isSticker || r.type === 'sticker') return;
+  saveState();
+  r.vertical = !r.vertical;
+  // sync back
+  syncAllItemsToStorage();
+  render();
+  updateSelInfo();
+  showToast(r.vertical ? '已切换为竖排' : '已切换为横排');
+}
+
+function syncAllItemsToStorage() {
+  currentRegions = [];
+  currentStickers = [];
+  allItems.forEach(item => {
+    if (item._isSticker) {
+      currentStickers.push({x:item.x, y:item.y, w:item.w, h:item.h, rotation:item.rotation});
+    } else {
+      const r = {type:item.type, x:item.x, y:item.y, w:item.w, h:item.h};
+      if (item.style) r.style = item.style;
+      if (item.rotation && item.rotation !== 0) r.rotation = item.rotation;
+      if (item.vertical) r.vertical = true;
+      currentRegions.push(r);
+    }
+  });
 }
 
 // ── 交互 ──
@@ -788,7 +1020,7 @@ function onPointerDown(e, idx, mode) {
     updateSelInfo();
   }
   const rect = canvas.getBoundingClientRect();
-  const r = currentRegions[idx];
+  const r = allItems[idx];
   dragState = {
     idx, mode,
     startX: e.clientX, startY: e.clientY,
@@ -801,146 +1033,193 @@ function onPointerDown(e, idx, mode) {
 }
 
 function onPointerMove(e) {
-	  if (!dragState) return;
-	  e.preventDefault();
-	  const ds = dragState;
-	  const dx = (e.clientX - ds.startX) / ds.canvasW;
-	  const dy = (e.clientY - ds.startY) / ds.canvasH;
-	  const r = currentRegions[ds.idx];
+  if (!dragState) return;
+  e.preventDefault();
+  const ds = dragState;
+  const dx = (e.clientX - ds.startX) / ds.canvasW;
+  const dy = (e.clientY - ds.startY) / ds.canvasH;
+  const r = allItems[ds.idx];
 
-	  if (ds.mode === 'move') {
-	    let nx = ds.origX + dx;
-	    let ny = ds.origY + dy;
-	    nx = Math.max(0, Math.min(1 - r.w, nx));
-	    ny = Math.max(0, Math.min(1 - r.h, ny));
-	    const snapped = applySnap(ds.idx, nx, ny, r.w, r.h);
-	    r.x = snapped.x;
-	    r.y = snapped.y;
-	  } else if (ds.mode === 'resize') {
-	    clearSnapLines();
-	    const nw = Math.max(0.03, ds.origW + dx);
-	    const nh = Math.max(0.03, ds.origH + dy);
-	    r.w = Math.min(1 - r.x, nw);
-	    r.h = Math.min(1 - r.y, nh);
-	  } else if (ds.mode === 'rotate') {
-	    clearSnapLines();
-	    const cx = ds.origX + ds.origW/2;
-	    const cy = ds.origY + ds.origH/2;
-	    const a1 = Math.atan2(ds.startY/ds.canvasH - cy, ds.startX/ds.canvasW - cx);
-	    const a2 = Math.atan2(e.clientY/ds.canvasH - cy, e.clientX/ds.canvasW - cx);
-	    r.rotation = Math.round((ds.origR + (a2 - a1)*180/Math.PI)*100)/100;
-	  }
-	  render();
-	  updateSelInfo();
-	}
+  if (ds.mode === 'move') {
+    let nx = ds.origX + dx;
+    let ny = ds.origY + dy;
+    nx = Math.max(0, Math.min(1 - r.w, nx));
+    ny = Math.max(0, Math.min(1 - r.h, ny));
+    const snapped = applySnap(ds.idx, nx, ny, r.w, r.h);
+    r.x = snapped.x;
+    r.y = snapped.y;
+  } else if (ds.mode === 'resize') {
+    clearSnapLines();
+    const nw = Math.max(0.03, ds.origW + dx);
+    const nh = Math.max(0.03, ds.origH + dy);
+    r.w = Math.min(1 - r.x, nw);
+    r.h = Math.min(1 - r.y, nh);
+  } else if (ds.mode === 'rotate') {
+    clearSnapLines();
+    const cx = ds.origX + ds.origW/2;
+    const cy = ds.origY + ds.origH/2;
+    const a1 = Math.atan2(ds.startY/ds.canvasH - cy, ds.startX/ds.canvasW - cx);
+    const a2 = Math.atan2(e.clientY/ds.canvasH - cy, e.clientX/ds.canvasW - cx);
+    r.rotation = Math.round((ds.origR + (a2 - a1)*180/Math.PI)*100)/100;
+  }
+  render();
+  updateSelInfo();
+}
 
-	function onPointerUp() {
-	  dragState = null;
-	  clearSnapLines();
-	  window.removeEventListener('pointermove', onPointerMove);
-	  window.removeEventListener('pointerup', onPointerUp);
-	  window.removeEventListener('pointercancel', onPointerUp);
-	}
+function onPointerUp() {
+  if (dragState) {
+    saveState();
+  }
+  dragState = null;
+  clearSnapLines();
+  syncAllItemsToStorage();
+  window.removeEventListener('pointermove', onPointerMove);
+  window.removeEventListener('pointerup', onPointerUp);
+  window.removeEventListener('pointercancel', onPointerUp);
+}
 
-	// ── 吸附对齐 ──
-	function toggleSnap() {
-	  snapEnabled = !snapEnabled;
-	  document.getElementById('snapBtn').classList.toggle('on', snapEnabled);
-	  if (!snapEnabled) clearSnapLines();
-	}
+// ── 吸附对齐 ──
+function toggleSnap() {
+  snapEnabled = !snapEnabled;
+  document.getElementById('snapBtn').classList.toggle('on', snapEnabled);
+  if (!snapEnabled) clearSnapLines();
+}
 
-	function ensureSnapLines() {
-	  if (!document.getElementById('snapH')) {
-	    const h = document.createElement('div');
-	    h.className = 'snap-line h'; h.id = 'snapH';
-	    canvas.appendChild(h);
-	  }
-	  if (!document.getElementById('snapV')) {
-	    const v = document.createElement('div');
-	    v.className = 'snap-line v'; v.id = 'snapV';
-	    canvas.appendChild(v);
-	  }
-	}
+function ensureSnapLines() {
+  if (!document.getElementById('snapH')) {
+    const h = document.createElement('div');
+    h.className = 'snap-line h'; h.id = 'snapH';
+    canvas.appendChild(h);
+  }
+  if (!document.getElementById('snapV')) {
+    const v = document.createElement('div');
+    v.className = 'snap-line v'; v.id = 'snapV';
+    canvas.appendChild(v);
+  }
+}
 
-	function clearSnapLines() {
-	  const h = document.getElementById('snapH');
-	  const v = document.getElementById('snapV');
-	  if (h) h.classList.remove('active');
-	  if (v) v.classList.remove('active');
-	}
+function clearSnapLines() {
+  const h = document.getElementById('snapH');
+  const v = document.getElementById('snapV');
+  if (h) h.classList.remove('active');
+  if (v) v.classList.remove('active');
+}
 
-	function applySnap(idx, x, y, w, h) {
-	  if (!snapEnabled) { clearSnapLines(); return {x, y}; }
+function applySnap(idx, x, y, w, h) {
+  if (!snapEnabled) { clearSnapLines(); return {x, y}; }
 
-	  const threshold = 8 / (375 * zoom);
+  const threshold = 8 / (375 * zoom);
+  const vTargets = [0, 0.5, 1];
+  const hTargets = [0, 0.5, 1];
+  allItems.forEach((r, i) => {
+    if (i === idx) return;
+    vTargets.push(r.x, r.x + r.w, r.x + r.w/2);
+    hTargets.push(r.y, r.y + r.h, r.y + r.h/2);
+  });
 
-	  // 收集所有对齐目标
-	  const vTargets = [0, 0.5, 1];
-	  const hTargets = [0, 0.5, 1];
-	  currentRegions.forEach((r, i) => {
-	    if (i === idx) return;
-	    vTargets.push(r.x, r.x + r.w, r.x + r.w/2);
-	    hTargets.push(r.y, r.y + r.h, r.y + r.h/2);
-	  });
+  const myV = [
+    {val: x,       off: 0},
+    {val: x + w,   off: -w},
+    {val: x + w/2, off: -w/2},
+  ];
+  const myH = [
+    {val: y,       off: 0},
+    {val: y + h,   off: -h},
+    {val: y + h/2, off: -h/2},
+  ];
 
-	  // 当前元素的各边
-	  const myV = [
-	    {val: x,       off: 0},
-	    {val: x + w,   off: -w},
-	    {val: x + w/2, off: -w/2},
-	  ];
-	  const myH = [
-	    {val: y,       off: 0},
-	    {val: y + h,   off: -h},
-	    {val: y + h/2, off: -h/2},
-	  ];
+  let snapV = null, snapH = null;
+  let bestVD = threshold, bestHD = threshold;
 
-	  let snapV = null, snapH = null;
-	  let bestVD = threshold, bestHD = threshold;
+  for (const mv of myV) {
+    for (const t of vTargets) {
+      const d = Math.abs(mv.val - t);
+      if (d < bestVD) { bestVD = d; snapV = {pos: t, off: mv.off}; }
+    }
+  }
+  for (const mh of myH) {
+    for (const t of hTargets) {
+      const d = Math.abs(mh.val - t);
+      if (d < bestHD) { bestHD = d; snapH = {pos: t, off: mh.off}; }
+    }
+  }
 
-	  for (const mv of myV) {
-	    for (const t of vTargets) {
-	      const d = Math.abs(mv.val - t);
-	      if (d < bestVD) { bestVD = d; snapV = {pos: t, off: mv.off}; }
-	    }
-	  }
-	  for (const mh of myH) {
-	    for (const t of hTargets) {
-	      const d = Math.abs(mh.val - t);
-	      if (d < bestHD) { bestHD = d; snapH = {pos: t, off: mh.off}; }
-	    }
-	  }
+  let nx = x, ny = y;
+  if (snapV) nx = Math.max(0, Math.min(1 - w, snapV.pos + snapV.off));
+  if (snapH) ny = Math.max(0, Math.min(1 - h, snapH.pos + snapH.off));
 
-	  let nx = x, ny = y;
-	  if (snapV) nx = Math.max(0, Math.min(1 - w, snapV.pos + snapV.off));
-	  if (snapH) ny = Math.max(0, Math.min(1 - h, snapH.pos + snapH.off));
+  const hEl = document.getElementById('snapH');
+  const vEl = document.getElementById('snapV');
+  if (snapV) { vEl.style.left = (snapV.pos * 100) + '%'; vEl.classList.add('active'); }
+  else vEl.classList.remove('active');
+  if (snapH) { hEl.style.top = (snapH.pos * 100) + '%'; hEl.classList.add('active'); }
+  else hEl.classList.remove('active');
 
-	  // 更新吸附线
-	  const hEl = document.getElementById('snapH');
-	  const vEl = document.getElementById('snapV');
-	  if (snapV) { vEl.style.left = (snapV.pos * 100) + '%'; vEl.classList.add('active'); }
-	  else vEl.classList.remove('active');
-	  if (snapH) { hEl.style.top = (snapH.pos * 100) + '%'; hEl.classList.add('active'); }
-	  else hEl.classList.remove('active');
+  return {x: nx, y: ny};
+}
 
-	  return {x: nx, y: ny};
-	}
-
-function deleteRegion(idx) {
-  currentRegions.splice(idx, 1);
+function deleteItem(idx) {
+  saveState();
+  syncAllItemsToStorage();
+  const item = allItems[idx];
+  if (item._isSticker) {
+    currentStickers.splice(item._idx, 1);
+  } else {
+    currentRegions.splice(item._idx, 1);
+  }
   if (selectedIdx === idx) selectedIdx = -1;
   else if (selectedIdx > idx) selectedIdx--;
+  rebuildAllItems();
   render();
   updateSelInfo();
   showToast('已删除');
 }
 
 function addRegion(type) {
+  saveState();
+  syncAllItemsToStorage();
   currentRegions.push({type, x:0.2, y:0.2, w:0.4, h:0.08});
-  selectedIdx = currentRegions.length - 1;
+  rebuildAllItems();
+  selectedIdx = allItems.length - 1;
   render();
   updateSelInfo();
   showToast('已添加 '+LABELS[type]);
+}
+
+function addSticker() {
+  saveState();
+  syncAllItemsToStorage();
+  currentStickers.push({x:0.4, y:0.4, w:0.12, h:0.12});
+  rebuildAllItems();
+  selectedIdx = allItems.length - 1;
+  render();
+  updateSelInfo();
+  showToast('已添加贴纸');
+}
+
+// ── 图层顺序 ──
+function moveLayerUp() {
+  if (selectedIdx < 0 || selectedIdx >= allItems.length - 1) return;
+  saveState();
+  syncAllItemsToStorage();
+  [allItems[selectedIdx], allItems[selectedIdx + 1]] = [allItems[selectedIdx + 1], allItems[selectedIdx]];
+  selectedIdx++;
+  syncAllItemsToStorage();
+  render();
+  updateSelInfo();
+  showToast('上移一层');
+}
+
+function moveLayerDown() {
+  if (selectedIdx <= 0) return;
+  saveState();
+  syncAllItemsToStorage();
+  [allItems[selectedIdx], allItems[selectedIdx - 1]] = [allItems[selectedIdx - 1], allItems[selectedIdx]];
+  selectedIdx--;
+  syncAllItemsToStorage();
+  render();
+  updateSelInfo();
+  showToast('下移一层');
 }
 
 // ── 缩放 ──
@@ -948,16 +1227,18 @@ function setZoom(z) {
   zoom = Math.max(0.3, Math.min(3, z));
   canvasWrap.style.transform = `scale(${zoom})`;
   zoomLabel.textContent = Math.round(zoom*100)+'%';
+  updateCanvasPadding();
 }
 
 function zoomIn() { setZoom(zoom + 0.15); }
 function zoomOut() { setZoom(zoom - 0.15); }
 function zoomFit() {
-  const areaW = canvasArea.clientWidth - 16;
-  const areaH = canvasArea.clientHeight - 16;
+  const areaW = canvasArea.clientWidth - 8;
+  const areaH = canvasArea.clientHeight - 8;
   const z = Math.min(areaW/375, areaH/740);
   setZoom(z);
-  canvasArea.scrollTop = 0;
+  canvasArea.scrollLeft = Math.max(0, (375 - canvasArea.clientWidth) / 2);
+  canvasArea.scrollTop = Math.max(0, (740 * z - canvasArea.clientHeight) / 2);
 }
 
 function toggleGrid() {
@@ -967,13 +1248,21 @@ function toggleGrid() {
 
 // ── 导出 ──
 function exportJSON() {
+  syncAllItemsToStorage();
+  const t = TEMPLATES[currentIdx];
   const out = {
-    id: TEMPLATES[currentIdx].id,
-    name: TEMPLATES[currentIdx].name,
+    id: t.id,
+    name: t.name,
     regions: currentRegions.map(r => {
       const obj = {type:r.type, x:r.x, y:r.y, w:r.w, h:r.h};
       if (r.style) obj.style = r.style;
       if (r.rotation && r.rotation!==0) obj.rotation = r.rotation;
+      if (r.vertical) obj.vertical = true;
+      return obj;
+    }),
+    stickers: currentStickers.map(s => {
+      const obj = {x:s.x, y:s.y, w:s.w, h:s.h};
+      if (s.rotation && s.rotation!==0) obj.rotation = s.rotation;
       return obj;
     })
   };
@@ -1004,9 +1293,23 @@ function toDart(out) {
     parts.push('h: '+r.h.toFixed(4));
     if (r.style) parts.push("style: '"+r.style+"'");
     if (r.rotation && r.rotation!==0) parts.push('rotation: '+r.rotation);
+    if (r.vertical) parts.push('vertical: true');
     lines.push('    LayoutRegion('+parts.join(', ')+'),');
   });
   lines.push('  ],');
+  if (out.stickers && out.stickers.length > 0) {
+    lines.push('  stickers: [');
+    out.stickers.forEach(s => {
+      let parts = [];
+      parts.push('x: '+s.x.toFixed(4));
+      parts.push('y: '+s.y.toFixed(4));
+      parts.push('w: '+s.w.toFixed(4));
+      parts.push('h: '+s.h.toFixed(4));
+      if (s.rotation && s.rotation!==0) parts.push('rotation: '+s.rotation);
+      lines.push('    StickerSlot('+parts.join(', ')+'),');
+    });
+    lines.push('  ],');
+  }
   lines.push('),');
   return lines.join('\n');
 }
