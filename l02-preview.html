@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L02 侧边栏 · 预览</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0ebe3;font-family:'PingFang SC','Microsoft YaHei',sans-serif;display:flex;flex-direction:column;align-items:center;padding:24px;min-height:100vh}
+h1{font-size:20px;color:#5c3d2e;margin-bottom:4px;letter-spacing:2px}
+.sub{font-size:12px;color:#b8a590;margin-bottom:20px}
+.phone{width:375px;height:740px;position:relative;background:linear-gradient(170deg,#fef9f0,#fdf5ea,#fef9f0);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.1);overflow:hidden}
+.r{position:absolute;box-sizing:border-box}
+.r-photo{background:rgba(255,255,255,0.7);border:2px dashed rgba(212,104,124,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:20px;color:#d4687c}
+.r-photo::after{content:'添加照片';font-size:9px;color:#c4b5a5}
+.r-title{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;text-orientation:upright;font-size:20px;font-weight:900;color:#5c3d2e;letter-spacing:6px}
+.r-date{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.r-date .main{font-size:14px;font-weight:700;color:#5c3d2e}
+.r-date .sub{font-size:10px;color:#8c7b6b;display:flex;gap:8px;margin-bottom:0}
+.r-card{background:rgba(255,255,255,0.7);border:2px solid rgba(201,169,110,0.2);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.04);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.r-card .label{font-size:12px;font-weight:700;color:#5c3d2e;padding-left:7px;border-left:3px solid #d4687c}
+.r-card .label.gold{border-left-color:#c9a96e;color:#8a6d3b}
+.r-card .hint{font-size:10px;color:#c4b5a5;background:rgba(255,255,255,0.7);border:1.5px dashed rgba(212,104,124,0.15);border-radius:7px;padding:6px 8px;min-height:20px;flex:1}
+.sticker{position:absolute;z-index:5;font-size:20px;opacity:0.7;pointer-events:none}
+</style>
+</head>
+<body>
+<h1>L02 · 侧边栏</h1>
+<p class="sub">沅子的魔法屋 · 手账模板预览</p>
+<div class="phone">
+  <!-- photo 1 -->
+  <div class="r r-photo" style="left:18.8px;top:30.3px;width:120px;height:133.2px">📷</div>
+  <!-- photo 2 -->
+  <div class="r r-photo" style="left:18.8px;top:515px;width:120px;height:133.2px">📷</div>
+  <!-- title - vertical -->
+  <div class="r r-title" style="left:213px;top:299px;width:82.9px;height:179.1px">海 边 日 记</div>
+  <!-- date -->
+  <div class="r r-date" style="left:159px;top:30.3px;width:190.5px;height:66.6px">
+    <div class="main">2026年8月16日</div>
+    <div class="sub"><span>😊 开心</span><span>☀️ 晴</span></div>
+  </div>
+  <!-- diary -->
+  <div class="r r-card" style="left:16.1px;top:288.6px;width:183.8px;height:199.8px">
+    <div class="label">📝 发生了什么事...</div>
+    <div class="hint">点击输入...</div>
+  </div>
+  <!-- done -->
+  <div class="r r-card" style="left:159.4px;top:112.5px;width:199.9px;height:74px">
+    <div class="label">✅ 今日完成</div>
+    <div class="hint">点击输入...</div>
+  </div>
+  <!-- thanks -->
+  <div class="r r-card" style="left:159.4px;top:193.9px;width:199.9px;height:74px">
+    <div class="label">🙏 感恩小事</div>
+    <div class="hint">点击输入...</div>
+  </div>
+  <!-- gain -->
+  <div class="r r-card" style="left:154.9px;top:495.8px;width:199.9px;height:66.6px">
+    <div class="label gold">🌟 收获</div>
+    <div class="hint">点击输入...</div>
+  </div>
+  <!-- improve -->
+  <div class="r r-card" style="left:154.9px;top:572px;width:199.9px;height:66.6px">
+    <div class="label gold">💡 改进</div>
+    <div class="hint">点击输入...</div>
+  </div>
+  <!-- expect -->
+  <div class="r r-card" style="left:154.9px;top:648.2px;width:199.9px;height:66.6px">
+    <div class="label gold">✨ 期待</div>
+    <div class="hint">点击输入...</div>
+  </div>
+  <!-- stickers -->
+  <div class="sticker" style="left:318.8px;top:16.3px">⭐</div>
+  <div class="sticker" style="left:123.8px;top:281.2px">🌸</div>
+  <div class="sticker" style="left:318.8px;top:680.8px">💫</div>
+</div>
+</body>
+</html>
